@@ -1,0 +1,13 @@
+dotnet new webapi
+dotnet dev-certs https --trust
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
+dotnet add package Microsoft.EntityFrameworkCore.Relational
+dotnet add package Swashbuckle.AspNetCore
+
+dotnet ef migrations add CreateDatabase
+
+dotnet ef database update
+
+dotnet run

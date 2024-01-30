@@ -5,7 +5,18 @@ Application development course carried out by PUCPR and Volvo Group: ASP.NET Cor
 
 # Project Theme
 
-Project....
+• Livre: Os alunos podem escolher o tema do projeto de acordo
+com seus interesses, desde que o projeto cumpra com os
+requisitos técnicos especificados abaixo.
+
+# Requisitos Obrigatórios
+
+• Banco de Dados: O projeto deve utilizar SQL Server como
+sistema de gerenciamento de banco de dados.
+• Entity Core do .NET: O acesso ao banco de dados deve ser
+feito utilizando o Entity Core do .NET.
+• Linguagem de Programação: O projeto deve ser
+desenvolvido em COBOL e/ou .NET.
 
 # Authors:
 ##### Rafael Galafassi

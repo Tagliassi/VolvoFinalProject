@@ -32,16 +32,6 @@ namespace VolvoFinalProject
         public string? Name { get; set; } = null!;
         [MaxLength(50)]
         [Required]
-        public Role Role { get; set; } 
-    }
-
-    public enum Role
-    {
-        [Description("Recepcionista")]
-        Receptionist = 1,
-        [Description("Gerenciador de inventário")]
-        InventoryManager = 2,
-        [Description("Engenheiro mecânico")]
-        MechanicalEngineer = 3
+        public EnumEmployees Employees { get; set; } 
     }
 }

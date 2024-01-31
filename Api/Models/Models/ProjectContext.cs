@@ -23,7 +23,7 @@ namespace VolvoFinalProject.Api.Models
         public virtual DbSet<Parts> Parts { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
-        
+       
         // Configuração do contexto
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -31,16 +31,6 @@ namespace VolvoFinalProject
         [MaxLength(08)]
         [Required]
         public string? CEP { get; set; } = null!;
-        public TelephoneType TelephoneType { get; set; }     
-    }
-
-    public enum TelephoneType
-    {
-        [Description("Celular")]
-        Mobile = 1,
-        [Description("Residencial")]
-        Residential = 2,
-        [Description("Empresarial")]
-        Bussiness = 3
+        public EnumTelephoneType Telephone { get; set; }     
     }
 }

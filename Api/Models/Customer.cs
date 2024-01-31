@@ -21,6 +21,8 @@ namespace VolvoFinalProject
         public int BillFK { get; set; }
         [ForeignKey("ContactID")]
         public int ContactFK { get; set; }
+        [ForeignKey("VehicleID")]
+        public int VehicleFK { get; set; }
         [MaxLength(100)]
         [Required]
         public string? Name { get; set; } = null!;

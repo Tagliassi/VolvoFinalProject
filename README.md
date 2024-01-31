@@ -22,5 +22,5 @@ desenvolvido em COBOL e/ou .NET.
 ##### Rafael Galafassi
 [![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/rafael-galafassi/)](https://www.linkedin.com/in/rafael-galafassi/) [![Github Badge](https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link=https://github.com/Tagliassi)](https://github.com/Tagliassi)
 
-##### Jannyfer Prochno
+##### Jenyffer Prochno
 [![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/jlprochno/)](https://www.linkedin.com/in/jlprochno/) [![Github Badge](https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link=https://github.com/Tagliassi)](https://github.com/Tagliassi) 

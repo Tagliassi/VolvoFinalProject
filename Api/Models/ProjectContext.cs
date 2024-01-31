@@ -13,8 +13,17 @@ namespace VolvoFinalProject.Api.Models
     public class ProjectContext : DbContext
     {
         // Tabelas do banco de dados
-
-
+        private readonly IConfiguration? _config;
+        public virtual DbSet<Bill> Bills { get; set; } = null!;
+        public virtual DbSet<CategoryService> CategoryServices { get; set; } = null!;
+        public virtual DbSet<Contacts> Contacts { get; set; } = null!;
+        public virtual DbSet<Customer> Customers { get; set; } = null!;
+        public virtual DbSet<Dealer> Dealers { get; set; } = null!;
+        public virtual DbSet<Employee> Employees { get; set; } = null!;
+        public virtual DbSet<Parts> Parts { get; set; } = null!;
+        public virtual DbSet<Service> Services { get; set; } = null!;
+        public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
+        
         // Configuração do contexto
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

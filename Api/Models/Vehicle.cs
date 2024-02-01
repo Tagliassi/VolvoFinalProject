@@ -29,12 +29,12 @@ namespace VolvoFinalProject.Api.Models
         public double Kilometrage { get; set; }
         [MaxLength(100)]        
         [Required]
-        public string? Model { get; set; } = null!;
+        public string Model { get; set; } = string.Empty;
         [MaxLength(50)]   
         [Required]     
-        public string? Color { get; set; } = null!; 
+        public string Color { get; set; } = string.Empty; 
         [MaxLength(20)]   
         [Required]     
-        public string? VersionSystem { get; set; } = null!;    
+        public string SystemVersion { get; set; } = string.Empty;
     }
 }

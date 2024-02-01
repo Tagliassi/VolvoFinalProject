@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VolvoFinalProject;
 using VolvoFinalProject.Api.Models;
 
-namespace VolvoFinalProject.Api.Interfaces
+namespace VolvoFinalProject.Api.RepositoryInterfaces
 {
     // Exemplo de contrato para um DTO
     public interface IDTO<T>

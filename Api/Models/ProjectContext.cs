@@ -15,11 +15,11 @@ namespace VolvoFinalProject.Api.Models
         // Tabelas do banco de dados
         public virtual DbSet<Bill> Bills { get; set; } = null!;
         public virtual DbSet<CategoryService> CategoryServices { get; set; } = null!;
-        public virtual DbSet<Contacts> Contacts { get; set; } = null!;
+        public virtual DbSet<Contacts> Contact { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<Dealer> Dealers { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
-        public virtual DbSet<Parts> Parts { get; set; } = null!;
+        public virtual DbSet<Parts> Part { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
        

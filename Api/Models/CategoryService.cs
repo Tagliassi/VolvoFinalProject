@@ -28,8 +28,8 @@ namespace VolvoFinalProject.Api.Models
         public double Value { get; set; }
         [MaxLength(100)]
         [Required]
-        public string? Description { get; set; } = null!; 
+        public string Description { get; set; } = string.Empty;
         public EnumCategoryService Category { get; set; } 
-        public ICollection<Parts> Parts { get; set; }  
+        public ICollection<Parts> Parts { get; set; } 
     }
 }

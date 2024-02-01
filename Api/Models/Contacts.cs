@@ -21,18 +21,18 @@ namespace VolvoFinalProject.Api.Models
         public string Email { get; set; } = null!;
         [MaxLength(11)]
         [Required]
-        public string TelephoneNumber { get; set; } = null!;
+        public string TelephoneNumber { get; set; } = string.Empty;
         [MaxLength(100)]
-        public string Street { get; set; } = null!;
+        public string Street { get; set; } = string.Empty;
         [MaxLength(100)]
-        public string City { get; set; } = null!;
+        public string City { get; set; } = string.Empty;
         [MaxLength(100)] 
-        public string Neighborhood { get; set; } = null!;
+        public string Neighborhood { get; set; } = string.Empty;
         [MaxLength(100)]
-        public string State { get; set; } = null!;
+        public string State { get; set; } = string.Empty;
         [MaxLength(08)]
         [Required]
-        public string CEP { get; set; } = null!;
+        public string CEP { get; set; } = string.Empty;
         public EnumTelephoneType Telephone { get; set; }     
     }
 }

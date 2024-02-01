@@ -26,9 +26,9 @@ namespace VolvoFinalProject.Api.Models
         public int VehicleFK { get; set; }
         [MaxLength(100)]
         [Required]
-        public string? Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
         [MaxLength(18)]
         [Required]
-        public string? CPF { get; set; } = null!;
+        public string CPF { get; set; } = string.Empty;
     }
 }

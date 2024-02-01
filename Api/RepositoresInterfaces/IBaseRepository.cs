@@ -1,6 +1,6 @@
 using VolvoFinalProject;
 
-namespace VolvoFinalProject.Api.Interfaces
+namespace VolvoFinalProject.Api.RepositoryInterfaces
 {
     public interface IBaseRepository<T> where T : class
     {

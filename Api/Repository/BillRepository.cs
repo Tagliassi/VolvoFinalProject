@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using VolvoFinalProject.Api.Interfaces;
+using VolvoFinalProject.Api.RepositoryInterfaces;
 using VolvoFinalProject.Api.Models;
 using VolvoFinalProject.Exceptions;
 using VolvoFinalProject;
@@ -12,17 +12,18 @@ namespace VolvoFinalProject.Api.Repository
 {
     public class BillRepository : IBillRepository
     {
-        private ProjectContext context;
+        private readonly ProjectContext _context;
         private bool disposed = false;
 
-        public BillRepository(ProjectContext _context)
+        public BillRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = context;
         }
 
-        public Task<Bill> AddEntity(Bill entity)
+        public async Task<Bill> AddEntity(Bill bill)
         {
-            throw new NotImplementedException();
+            await _context.Set<Bill>().AddAsync(bill);
+            return bill; 
         }
 
         public Task DeleteEntity(int id)

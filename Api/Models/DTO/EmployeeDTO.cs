@@ -1,57 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using VolvoFinalProject;
-using VolvoFinalProject.Api.Interfaces;
+using VolvoFinalProject.Api.RepositoryInterfaces;
 using VolvoFinalProject.Api.Models.Enum;
 
 namespace VolvoFinalProject.Api.Models.DTO
 {
-    public class EmployeeDTO : IDTO<Employee>
+    public class EmployeeDTO
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
         public int EmployeeID { get; set; }
+        [ForeignKey("DealerID")] 
         public int DealerFK { get; set; }
-        public int ServiceFK { get; set; }
+        [ForeignKey("ContactID")] 
         public int ContactFK { get; set; }
         public float Salary { get; set; }
-        public float BaseSalary { get; set; }
-        public float Commission { get; set; }
-        public string? CPF { get; set; }
-        public string? Name { get; set; }
-        public EnumEmployees Employees { get; set; }
-
-        public EmployeeDTO() { }
-
-        public EmployeeDTO(Employee employee)
-        {
-            EmployeeID = employee.EmployeeID;
-            DealerFK = employee.DealerFK;
-            ServiceFK = employee.ServiceFK;
-            ContactFK = employee.ContactFK;
-            Salary = employee.Salary;
-            BaseSalary = employee.BaseSalary;
-            Commission = employee.Commission;
-            CPF = employee.CPF;
-            Name = employee.Name;
-            Employees = employee.Employees;
-        }
-
-        public Employee CreateEntity()
-        {
-            return new Employee
-            {
-                // Mapeamento inverso das propriedades
-                DealerFK = this.DealerFK,
-                ServiceFK = this.ServiceFK,
-                ContactFK = this.ContactFK,
-                Salary = this.Salary,
-                BaseSalary = this.BaseSalary,
-                Commission = this.Commission,
-                CPF = this.CPF,
-                Name = this.Name,
-                Employees = this.Employees
-            };
-        }
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+        [MaxLength(50)]
+        [Required]
+        public EnumEmployees Employees { get; set; } 
     }
 }

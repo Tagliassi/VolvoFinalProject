@@ -13,6 +13,11 @@ namespace VolvoFinalProject.Api.Controllers
     [ApiController]
     public class ServiceController : ControllerBase
     {
+        private readonly IMapper _mapper;
+        public ServiceController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
     }
 }

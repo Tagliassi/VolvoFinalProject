@@ -1,34 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using VolvoFinalProject;
-using VolvoFinalProject.Api.Interfaces;
-
+using VolvoFinalProject.Api.RepositoryInterfaces;
+using VolvoFinalProject.Api.Models.Enum;
 namespace VolvoFinalProject.Api.Models.DTO
 {
-    public class BillDTO : IDTO<Bill>
+    public class BillDTO
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
         public int BillID { get; set; }
+        [ForeignKey("CustomerID")]
         public int CustomerFK { get; set; }
+        [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
+        [Required]
         public double Amount { get; set; }
-
-        public Bill CreateEntity(Customer Customer, Service Service) 
-        {
-            return new Bill()
-            {
-                BillID = this.BillID,
-                CustomerFK = Customer,
-                ServiceFK = Service,
-                Amount = this.Amount
-            };
-        }
-
-        public Bill CreateEntity()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

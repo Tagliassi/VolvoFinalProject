@@ -29,9 +29,9 @@ namespace VolvoFinalProject.Api.Models
         public float Commission { get; set; }
         [MaxLength(11)]
         [Required]
-        public string? CPF { get; set; } = null!;
+        public string CPF { get; set; } = string.Empty;
         [MaxLength(100)]
-        public string? Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
         [MaxLength(50)]
         [Required]
         public EnumEmployees Employees { get; set; } 

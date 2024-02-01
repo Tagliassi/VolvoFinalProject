@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,10 @@ namespace VolvoFinalProject.Api.Controllers
     [ApiController]
     public class ContactsController : ControllerBase
     {
-
+        private readonly IMapper _mapper;
+        public ContactsController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
     }
 }

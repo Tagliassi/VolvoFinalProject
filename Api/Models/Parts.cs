@@ -22,9 +22,9 @@ namespace VolvoFinalProject.Api.Models
         [Required]
         public bool Availabity { get; set; }  
         [MaxLength(100)]
-        public string? Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
         [MaxLength(50)]
         [Required]
-        public string? Location { get; set; } = null!; 
+        public string Location { get; set; } = string.Empty;
     }
 }

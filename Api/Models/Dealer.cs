@@ -25,9 +25,9 @@ namespace VolvoFinalProject.Api.Models
         public int? CostumerFK { get; set; }   
         [MaxLength(18)]
         [Required]
-        public string? CNPJ { get; set; } = null!;
+        public string CNPJ { get; set; } = string.Empty;
         [MaxLength(100)]
         [Required]
-        public string? Name { get; set; } = null!; 
+        public string Name { get; set; } = string.Empty;
     }
 }

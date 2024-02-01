@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
-using VolvoFinalProject.Api.Models;
-using VolvoFinalProject.Api.RepositoryInterfaces;
 using VolvoFinalProject.Api.Repository;
 using VolvoFinalProject.Api.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VolvoFinalProject.Api.AutoMappers;
 using AutoMapper;
+using VolvoFinalProject.Api.Repository.Interfaces;
+using VolvoFinalProject.Api.Repository.Repositories;
+using VolvoFinalProject.Api.Model.Models;
+using VolvoFinalProject.Api.DTOService.Interfaces;
+using VolvoFinalProject.Api.DTOService.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,9 +35,15 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Application Services.
-
-
+// Application Service.
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<ICategoryServiceService, CategoryServiceService>();
+builder.Services.AddScoped<IContactsService, ContactsService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IPartsService, PartsService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 // Add logging service
 builder.Services.AddLogging();

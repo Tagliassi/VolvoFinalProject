@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using VolvoFinalProject.Api.Models;
+using VolvoFinalProject.Api.Model.Models;
 
 namespace VolvoFinalProject.Api.Middlewares
 {

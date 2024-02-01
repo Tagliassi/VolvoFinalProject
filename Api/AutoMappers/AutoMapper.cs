@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using VolvoFinalProject.Api.Models;
-using VolvoFinalProject.Api.Models.DTO;
+using VolvoFinalProject.Api.Model.Models;
+using VolvoFinalProject.Api.Model.DTO;
 
 namespace VolvoFinalProject.Api.AutoMappers
 {

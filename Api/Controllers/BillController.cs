@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject;
-using VolvoFinalProject.Api.RepositoryInterfaces;
+using VolvoFinalProject.Api.Repository.Interfaces;
 
 namespace VolvoFinalProject.Api.Controllers
 {

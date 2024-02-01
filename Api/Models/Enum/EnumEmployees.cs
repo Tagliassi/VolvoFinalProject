@@ -1,6 +1,7 @@
 using System.ComponentModel;
+using VolvoFinalProject;
 
-namespace VolvoFinalProject
+namespace VolvoFinalProject.Api.Models.Enum  
 {
     public enum EnumEmployees
     {

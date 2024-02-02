@@ -28,7 +28,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 return service;
             }
 
-            throw new ErrorViewModel("Employee Not Found", $"Worker with Id {employeeId} not found.");
+            throw new ErrorViewModel("Employee Not Found", $"Employee with Id {employeeId} not found.");
         }
 
         public async Task<Employee> AddEntity(Employee entity)
@@ -47,7 +47,19 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 //await _context.SaveChangesAsync();
             }
 
-            throw new ErrorViewModel("Employee Not Found", $"Worker with Id {id} not found.");
+            throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
+        }
+
+        public async Task<Employee> DeleteEntity(Employee employe)
+        {
+            var entity = await _context.Set<Employee>().FindAsync(employe);
+            if (entity != null)
+            {
+                _context.Set<Employee>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Employee Not Found", $"Employee {employe} not found.");
         }
 
         public async Task<ICollection<Employee>> GetAllEntity()
@@ -61,9 +73,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             var entity = await _context
                 .Set<Employee>()
                 .Include("Contact")
-                .Include("Address")
                 .Include("Dealer")
-                .Include("Services")
+                .Include("Service")
                 .SingleAsync(w => w.EmployeeID == id);
 
             if (entity != null)
@@ -71,7 +82,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 return entity;
             }
 
-            throw new ErrorViewModel("Employee Not Found", $"Worker with Id {id} not found.");
+            throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
         }
 
         public async Task<Employee> UpdateEntity(int id, Employee entity)
@@ -84,7 +95,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 return entity;
             }
 
-            throw new ErrorViewModel("Employee Not Found", $"Worker with Id {id} not found.");
+            throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
         }
     }
 }

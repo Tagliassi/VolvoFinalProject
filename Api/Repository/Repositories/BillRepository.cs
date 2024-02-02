@@ -13,37 +13,64 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     public class BillRepository : IBillRepository
     {
         private readonly ProjectContext _context;
-        private bool disposed = false;
 
         public BillRepository(ProjectContext context)
         {
             _context = context;
         }
 
-        public async Task<Bill> AddEntity(Bill bill)
+        public async Task<Bill> AddEntity(Bill entity)
         {
-            await _context.Set<Bill>().AddAsync(bill);
-            return bill; 
+            await _context.Set<Bill>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Bill>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Bill>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Employee Not Found", $"Bill with Id {id} not found.");
         }
 
-        public Task<ICollection<Bill>> GetAllEntity()
+        public async Task<ICollection<Bill>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Bill>().ToListAsync<Bill>();
+            return entities;
         }
 
-        public Task<Bill> GetOneEntity(int id)
+        public async Task<Bill> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Bill>()
+                .Include("Customer")
+                .Include("Service")
+                .SingleAsync(w => w.BillID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
         }
 
-        public Task<Bill> UpdateEntity(int id, Bill entity)
+        public async Task<Bill> UpdateEntity(int id, Bill entity)
         {
-            throw new NotImplementedException();
+            var oldEntity = await _context.Set<Bill>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Bill>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
         }
     }
 }

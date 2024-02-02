@@ -18,7 +18,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly IVehicleRepository _repository;
         private readonly IMapper _mapper;
 
-        public VehicleService(IVehicleRepository repository, Mapper mapper)
+        public VehicleService(IVehicleRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -12,37 +12,67 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        private ProjectContext context;
-        private bool disposed = false;
-
-        public ServiceRepository(ProjectContext _context)
+        private ProjectContext _context;
+        public ServiceRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = context;
         }
 
-        public Task<Service> AddEntity(Service entity)
+        public async Task<Service> AddEntity(Service entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Service>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Service>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Service>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
         }
 
-        public Task<ICollection<Service>> GetAllEntity()
+        public async Task<ICollection<Service>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Service>().ToListAsync<Service>();
+            return entities;
         }
 
-        public Task<Service> GetOneEntity(int id)
+        public async Task<Service> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Service>()
+                .Include("Parts")
+                .Include("Employee")
+                .Include("Customer")
+                .Include("Vehicle")
+                .Include("CategoryService")
+                .SingleAsync(w => w.ServiceID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
         }
 
-        public Task<Service> UpdateEntity(int id, Service entity)
+        public async Task<Service> UpdateEntity(int id, Service entity)
         {
-            throw new NotImplementedException();
-        }
+            var oldEntity = await _context.Set<Service>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Service>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
+        } 
     }
 }

@@ -18,7 +18,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly IDealerRepository _repository;
         private readonly IMapper _mapper;
 
-        public DealerService(IDealerRepository repository, Mapper mapper)
+        public DealerService(IDealerRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -11,37 +11,64 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class PartsRepository : IPartsRepository
     {
-        private ProjectContext context;
+        private ProjectContext _context;
         private bool disposed = false;
 
-        public PartsRepository(ProjectContext _context)
+        public PartsRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = context;
         }
 
-        public Task<Parts> AddEntity(Parts entity)
+        public async Task<Parts> AddEntity(Parts entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Parts>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Parts>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Parts>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Part Not Found", $"Part with Id {id} not found.");
         }
 
-        public Task<ICollection<Parts>> GetAllEntity()
+        public async Task<ICollection<Parts>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Parts>().ToListAsync<Parts>();
+            return entities;
         }
 
-        public Task<Parts> GetOneEntity(int id)
+        public async Task<Parts> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Parts>()         
+                .SingleAsync(w => w.PartID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Part Not Found", $"Part with Id {id} not found.");
         }
 
-        public Task<Parts> UpdateEntity(int id, Parts entity)
+        public async Task<Parts> UpdateEntity(int id, Parts entity)
         {
-            throw new NotImplementedException();
-        }
+            var oldEntity = await _context.Set<Parts>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Parts>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Part Not Found", $"Part with Id {id} not found.");
+        } 
     }
 }

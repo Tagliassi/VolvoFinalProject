@@ -18,7 +18,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly ICategoryServiceRepository _repository;
         private readonly IMapper _mapper;
 
-        public CategoryServiceService(ICategoryServiceRepository repository, Mapper mapper)
+        public CategoryServiceService(ICategoryServiceRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

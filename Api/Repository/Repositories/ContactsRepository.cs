@@ -11,37 +11,63 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class ContactsRepository : IContactsRepository
     {
-        private ProjectContext context;
-        private bool disposed = false;
+        private ProjectContext _context;
 
-        public ContactsRepository(ProjectContext _context)
+        public ContactsRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = context;
         }
 
-        public Task<Contacts> AddEntity(Contacts entity)
+        public async Task<Contacts> AddEntity(Contacts entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Contacts>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Contacts>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Contacts>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Contact Not Found", $"Contact with Id {id} not found.");
         }
 
-        public Task<ICollection<Contacts>> GetAllEntity()
+        public async Task<ICollection<Contacts>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Contacts>().ToListAsync<Contacts>();
+            return entities;
         }
 
-        public Task<Contacts> GetOneEntity(int id)
+        public async Task<Contacts> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Contacts>()
+                .SingleAsync(w => w.ContactsID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Contact Not Found", $"Contact with Id {id} not found.");
         }
 
-        public Task<Contacts> UpdateEntity(int id, Contacts entity)
+        public async Task<Contacts> UpdateEntity(int id, Contacts entity)
         {
-            throw new NotImplementedException();
+            var oldEntity = await _context.Set<Contacts>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Contacts>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Contact Not Found", $"Contact with Id {id} not found.");
         }
     }
 }

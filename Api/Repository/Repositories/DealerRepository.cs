@@ -11,37 +11,66 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class DealerRepository : IDealerRepository
     {
-        private ProjectContext context;
-        private bool disposed = false;
-
-        public DealerRepository(ProjectContext _context)
+        private ProjectContext _context;
+        public DealerRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = _context;
         }
 
-        public Task<Dealer> AddEntity(Dealer entity)
+        public async Task<Dealer> AddEntity(Dealer entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Dealer>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Dealer>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Dealer>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
         }
 
-        public Task<ICollection<Dealer>> GetAllEntity()
+        public async Task<ICollection<Dealer>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Dealer>().ToListAsync<Dealer>();
+            return entities;
         }
 
-        public Task<Dealer> GetOneEntity(int id)
+        public async Task<Dealer> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Dealer>()  
+                .Include("Contact")
+                .Include("Service")
+                .Include("Employee")
+                .Include("Customer")     
+                .SingleAsync(w => w.DealerID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
         }
 
-        public Task<Dealer> UpdateEntity(int id, Dealer entity)
+        public async Task<Dealer> UpdateEntity(int id, Dealer entity)
         {
-            throw new NotImplementedException();
+            var oldEntity = await _context.Set<Dealer>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Dealer>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
         }
     }
 }

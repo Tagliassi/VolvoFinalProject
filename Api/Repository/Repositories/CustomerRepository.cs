@@ -11,37 +11,66 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private ProjectContext context;
-        private bool disposed = false;
-
-        public CustomerRepository(ProjectContext _context)
+        private ProjectContext _context;
+        public CustomerRepository(ProjectContext context)
         {
-            this.context = _context;
+            _context = context;
         }
 
-        public Task<Customer> AddEntity(Customer entity)
+        public async Task<Customer> AddEntity(Customer entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Customer>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Customer>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Customer>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
         }
 
-        public Task<ICollection<Customer>> GetAllEntity()
+        public async Task<ICollection<Customer>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Customer>().ToListAsync<Customer>();
+            return entities;
         }
 
-        public Task<Customer> GetOneEntity(int id)
+        public async Task<Customer> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Customer>()  
+                .Include("Service")
+                .Include("Bill")
+                .Include("Contact")
+                .Include("Vehicle")     
+                .SingleAsync(w => w.CustomerID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
         }
 
-        public Task<Customer> UpdateEntity(int id, Customer entity)
+        public async Task<Customer> UpdateEntity(int id, Customer entity)
         {
-            throw new NotImplementedException();
+            var oldEntity = await _context.Set<Customer>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Customer>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
         }
     }
 }

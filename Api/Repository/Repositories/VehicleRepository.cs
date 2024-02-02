@@ -11,43 +11,78 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 {
     public class VehicleRepository : IVehicleRepository
     {
-        private ProjectContext context;
-        private bool disposed = false;
+        private ProjectContext _context;
 
-        public VehicleRepository(ProjectContext _context)
+        public async Task<ICollection<Vehicle>> GetVehicleByKmAndSystemVersion(int km, string systemVersion)
         {
-            this.context = _context;
+            var vehicle = await _context.Vehicles
+                .Where(v => v.Kilometrage == km && v.SystemVersion == systemVersion )
+                .ToListAsync();
+
+            if (vehicle != null){
+                return vehicle;
+            }
+
+            throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with km {km} System Version {systemVersion} not found.");
         }
 
-        public Task<Vehicle> AddEntity(Vehicle entity)
+        public VehicleRepository(ProjectContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteEntity(int id)
+        public async Task<Vehicle> AddEntity(Vehicle entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<Vehicle>().AddAsync(entity);
+            //await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<ICollection<Vehicle>> GetAllEntity()
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<Vehicle>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Vehicle>().Remove(entity);
+                //await _context.SaveChangesAsync();
+            }
+
+            throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
         }
 
-        public Task<Vehicle> GetOneEntity(int id)
+        public async Task<ICollection<Vehicle>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<Vehicle>().ToListAsync<Vehicle>();
+            return entities;
         }
 
-        public Task<ICollection<Vehicle>> GetVehicleByKmAndSystemVersion(int km, string systemVersion)
+        public async Task<Vehicle> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context
+                .Set<Vehicle>()
+                .Include("Customer")
+                .Include("Service")
+                .SingleAsync(w => w.VehicleID == id);
+
+            if (entity != null)
+            {
+                return entity;
+            }
+
+            throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
         }
 
-
-        public Task<Vehicle> UpdateEntity(int id, Vehicle entity)
+        public async Task<Vehicle> UpdateEntity(int id, Vehicle entity)
         {
-            throw new NotImplementedException();
+            var oldEntity = await _context.Set<Vehicle>().FindAsync(id);
+            if (oldEntity != null)
+            {
+                _context.Entry<Vehicle>(oldEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
         }
     }
 }

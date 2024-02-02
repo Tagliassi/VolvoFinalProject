@@ -18,7 +18,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly IPartsRepository _repository;
         private readonly IMapper _mapper;
 
-        public PartsService(IPartsRepository repository, Mapper mapper)
+        public PartsService(IPartsRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

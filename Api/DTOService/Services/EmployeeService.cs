@@ -18,34 +18,36 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly IEmployeeRepository _repository;
         private readonly IMapper _mapper;
 
-        public EmployeeService(IEmployeeRepository repository, Mapper mapper)
+        public EmployeeService(IEmployeeRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-        public Task<EmployeeDTO> AddEntity(EmployeeDTO entity)
+
+        public async Task<EmployeeDTO> AddEntity(EmployeeDTO entity)
         {
-            throw new NotImplementedException();
+            var Employee = _mapper.Map<Employee>(entity);
+            var IncludedEmployee = await _repository.AddEntity(Employee);
+            return _mapper.Map<EmployeeDTO>(IncludedEmployee);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task<ICollection<EmployeeDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Employees = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<EmployeeDTO>>(Employees);
         }
 
-        public Task<ICollection<EmployeeDTO>> GetAllEntity()
+        public async Task<EmployeeDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Employee = await _repository.GetOneEntity(id);
+            return _mapper.Map<EmployeeDTO>(Employee);
         }
 
-        public Task<EmployeeDTO> GetOneEntity(int id)
+        public async Task<EmployeeDTO> UpdateEntity(int id, EmployeeDTO entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<EmployeeDTO> UpdateEntity(int id, EmployeeDTO entity)
-        {
-            throw new NotImplementedException();
+            var Employee = _mapper.Map<Employee>(entity);
+            var UptadedEmployee = await _repository.UpdateEntity(Employee.EmployeeID, Employee);
+            return _mapper.Map<EmployeeDTO>(UptadedEmployee);
         }
     }
 }

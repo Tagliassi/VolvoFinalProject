@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 using VolvoFinalProject;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
@@ -72,14 +71,14 @@ namespace VolvoFinalProject.Api.DTOService.Services
             return _mapper.Map<EmployeeDTO>(UptadedEmployee);
         }
 
-        public async Task<double> CalculateSalary(Employee employee, CategoryService categoryService)
+        public async Task<double> CalculateSalary(Employee employee, Service service)
         {
             var salary = employee.BaseSalary;
             var services = await _repository.GetServicesByEmployee(employee.EmployeeID);
 
-            foreach (var service in services)
+            foreach (var empService in services)
             {
-                var value = categoryService.Value * employee.Commission;
+                var value = service.Value * employee.Commission;
                 salary += value;
             }
 

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 
 namespace VolvoFinalProject.Api.Repository.Repositories
 {

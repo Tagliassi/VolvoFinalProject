@@ -26,7 +26,6 @@ namespace VolvoFinalProject.Api.Model.DTO
         [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }
-        public double Value { get; set; }
         [MaxLength(100, ErrorMessage = "O valor máximo para a descrição é 100 caracteres.")]
         [Required (ErrorMessage = "A descrição é obrigatória.")]
         public string Description { get; set; } = string.Empty;

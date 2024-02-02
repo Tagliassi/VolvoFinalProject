@@ -24,8 +24,7 @@ namespace VolvoFinalProject.Api.Model.Models
         public int CategoryServiceID { get; set; }
         [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
-        public int ExecutionTime { get; set; }
-        public double Value { get; set; }
+        public int ExecutionTime { get; set; }        
         [MaxLength(100)]
         [Required]
         public string Description { get; set; } = string.Empty;

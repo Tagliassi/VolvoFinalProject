@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 
 namespace VolvoFinalProject.Api.Repository.Repositories
 {
@@ -15,6 +14,20 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public CustomerRepository(ProjectContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Service>> GetServicesByCustomer(int customerId)
+        {
+            var services = await _context.Services
+                .Where(s => s.CustomerFK == customerId)
+                .ToListAsync();
+
+            if (services.Any())  // Verifica se há serviços encontrados
+            {
+                return services;
+            }
+
+            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {customerId} not found or has no services.");
         }
 
         public async Task<Customer> AddEntity(Customer entity)

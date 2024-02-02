@@ -7,6 +7,6 @@ namespace VolvoFinalProject.Api.DTOService.Interfaces
 {
     public interface IEmployeeService : IBaseService<EmployeeDTO>
     {
-        Task<double> CalculateSalary(Employee employee, CategoryService categoryService);
+        Task<double> CalculateSalary(Employee employee, Service service);
     }
 }

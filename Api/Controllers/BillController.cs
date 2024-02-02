@@ -17,10 +17,18 @@ namespace VolvoFinalProject.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBillRepository _billRepository;
+
         public BillController(IBillRepository billRepository, IMapper mapper)
         {
             _mapper = mapper;
             _billRepository = billRepository;
+        }
+
+        public async Task<ActionResult<ICollection<Sale>>> GetBills()
+        {
+            var bill = await billRepository.GetAllEntity();
+            return Ok(bill);
+
         }
 
 

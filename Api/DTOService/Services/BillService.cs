@@ -5,23 +5,37 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 using VolvoFinalProject;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
 using AutoMapper;
+using VolvoFinalProject.Api.Repository.Repositories;
 
 namespace VolvoFinalProject.Api.DTOService.Services
 {
     public class BillService : IBillService
     {
         private readonly IBillRepository _repository;
+        private readonly CustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public BillService(IBillRepository repository, IMapper mapper)
+        public BillService(IBillRepository repository, IMapper mapper,CustomerRepository customerRepository)
         {
             _repository = repository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
+        }
+
+        public async Task<double> CalculateBill(Customer customer)
+        {
+            var bill = 0.0;
+            var services = await _customerRepository.GetServicesByCustomer(customer.CustomerID);
+            foreach (var custService in services)
+            {
+                var value = custService.Value;
+                bill += value;
+            }
+            return bill;
         }
 
         public async Task<BillDTO> AddEntity(BillDTO entity)

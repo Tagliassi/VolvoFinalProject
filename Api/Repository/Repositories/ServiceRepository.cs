@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 
 
 namespace VolvoFinalProject.Api.Repository.Repositories
@@ -13,9 +12,28 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     public class ServiceRepository : IServiceRepository
     {
         private ProjectContext _context;
-        public ServiceRepository(ProjectContext context)
+
+        private CustomerRepository _repository;
+
+        public ServiceRepository(ProjectContext context, CustomerRepository repository )
         {
             _context = context;
+            _repository = repository;
+
+        }
+
+        public async Task<List<Service>> GetServiceDetails(Customer customer)
+        {
+            // Certifique-se de que GetServicesByCustomer retorna IEnumerable<Service>
+            var services = await _repository.GetServicesByCustomer(customer.CustomerID);
+            var serviceDetails = new List<Service>();
+
+            foreach (var service in services)
+            {
+                serviceDetails.Add(service);
+            }
+
+            return serviceDetails;
         }
 
         public async Task<Service> AddEntity(Service entity)
@@ -73,6 +91,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             }
 
             throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
-        } 
+        }
     }
 }

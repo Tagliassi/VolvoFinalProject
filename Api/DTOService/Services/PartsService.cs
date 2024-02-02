@@ -54,7 +54,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task<ICollection<PartsDTO>> GetAllEntity()
         {
-            var Partss = await _repository.GetAllEntity();
+            var Parts = await _repository.GetAllEntity();
             return _mapper.Map<ICollection<PartsDTO>>(Parts);
         }
 
@@ -67,9 +67,8 @@ namespace VolvoFinalProject.Api.DTOService.Services
         public async Task<PartsDTO> UpdateEntity(int id, PartsDTO entity)
         {
             var Parts = _mapper.Map<Parts>(entity);
-            var UptadedParts = await _repository.UpdateEntity(Parts.PartsID, Parts);
+            var UptadedParts = await _repository.UpdateEntity(Parts.PartID, Parts);
             return _mapper.Map<PartsDTO>(UptadedParts);
         }
-
     }
 }

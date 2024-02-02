@@ -5,6 +5,6 @@ namespace VolvoFinalProject.Api.Repository.Interfaces
 {
     public interface IServiceRepository : IBaseRepository<Service>
     {
-        
+        Task<List<Service>> GetServiceDetails(Customer customer);
     }
 }

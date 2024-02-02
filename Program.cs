@@ -12,9 +12,27 @@ using VolvoFinalProject.Api.Repository.Repositories;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.DTOService.Services;
-
+using VolvoFinalProject.Api;
+using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuração do Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console() // Log para o console
+    .WriteTo.File("C:\\VolvoFinalProject\\Api\\log.txt", rollingInterval: RollingInterval.Day) // Log para um arquivo com rotação diária
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .ReadFrom.Configuration(builder.Configuration) // Configurações do appsettings.json
+    .MinimumLevel.ControlledBy(new Serilog.Core.LoggingLevelSwitch
+    {
+        MinimumLevel = GetLogLevel() // Obtém o nível de detalhamento configurado
+    })
+    .CreateLogger();
+
+builder.Logging.ClearProviders(); // Remover os provedores padrão
+builder.Logging.AddSerilog(); // Adicionar o provedor Serilog
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -22,6 +40,24 @@ builder.Services.AddSwaggerGen();
 
 // Application Automapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+// Adicionar IConfiguration
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+// Configurar o logging
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole();
+builder.Logging.AddSerilog();
+
+LogEventLevel GetLogLevel()
+{
+    var defaultLogLevel = LogEventLevel.Information;
+
+    // Obter o nível de detalhamento configurado no appsettings.json
+    var logLevel = builder.Configuration.GetValue<string>("Logging:LogLevel:Default");
+
+    return Enum.TryParse<LogEventLevel>(logLevel, out var result) ? result : defaultLogLevel;
+}
 
 // Application Repositories.
 builder.Services.AddScoped<IBillRepository, BillRepository>();
@@ -52,7 +88,7 @@ builder.Services.AddDbContext<ProjectContext>(opt => opt.UseSqlServer("VolvoFina
 var app = builder.Build();
 
 // Use Middleware 
-app.UseMiddleware(typeof(ErrorMiddleware));
+app.UseMiddleware<ErrorMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

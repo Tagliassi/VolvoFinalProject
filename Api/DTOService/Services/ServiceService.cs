@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 using VolvoFinalProject;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
 using AutoMapper;
+using VolvoFinalProject.Api.Model.Models.Enum;
 
 namespace VolvoFinalProject.Api.DTOService.Services
 {
@@ -22,6 +22,33 @@ namespace VolvoFinalProject.Api.DTOService.Services
         {
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<ServiceDTO> UpdateServiceStatus(int id, EnumSituation newStatus)
+        {
+            // Obtenha o serviço existente pelo ID
+            var existingService = await _repository.GetOneEntity(id);
+
+            if (existingService == null)
+            {
+                throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
+            }
+
+            // Atualize o status do serviço
+            existingService.Situation = newStatus;
+
+            try
+            {
+                // Atualize o serviço no repositório
+                var updatedService = await _repository.UpdateEntity(existingService.ServiceID, existingService);
+
+                // Mapeie o serviço atualizado para um DTO e retorne
+                return _mapper.Map<ServiceDTO>(updatedService);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Updating Service Status", $"{ex.Message}");
+            }
         }
 
         public async Task<ServiceDTO> AddEntity(ServiceDTO entity)
@@ -69,11 +96,6 @@ namespace VolvoFinalProject.Api.DTOService.Services
             var Service = _mapper.Map<Service>(entity);
             var UptadedService = await _repository.UpdateEntity(Service.ServiceID, Service);
             return _mapper.Map<ServiceDTO>(UptadedService);
-        }
-
-        public async Task<Service> CreateService()
-        {
-            
         }
     }
 }

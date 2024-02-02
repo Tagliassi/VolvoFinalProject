@@ -5,6 +5,6 @@ namespace VolvoFinalProject.Api.Repository.Interfaces
 {
     public interface IDealerRepository : IBaseRepository<Dealer>
     {
-
+        Task<ICollection<Employee>> GetEmployeesByDealer(int dealerId);
     }
 }

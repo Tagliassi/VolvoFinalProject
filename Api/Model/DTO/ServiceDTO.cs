@@ -26,18 +26,10 @@ namespace VolvoFinalProject.Api.Model.DTO
         [ForeignKey("VehicleID")]
         public int VehicleFK { get; set; }
         [ForeignKey("CategoryServiceID")]
-        public int CategoryServiceFK { get; set; }        
+        public int CategoryServiceFK { get; set; } 
+        public double Value { get; set; }       
         [Required(ErrorMessage = "A data do serviço é obrigatória.")]
         public DateTime? Date { get; set; }
         public EnumSituation Situation { get; set; } 
-
-        public Service CreateEntity()
-        {
-            return new Service()
-            {
-                Date = DateTime.Now,
-                Situation = this.Situation
-            };
-        }
     }
 }

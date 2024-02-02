@@ -26,7 +26,8 @@ namespace VolvoFinalProject.Api.Model.Models
         [ForeignKey("VehicleID")]
         public int VehicleFK { get; set; }
         [ForeignKey("CategoryServiceID")]
-        public int CategoryServiceFK { get; set; }        
+        public int CategoryServiceFK { get; set; } 
+        public double Value { get; set; }       
         public DateTime? Date { get; set; }
         public EnumSituation Situation { get; set; } 
     }

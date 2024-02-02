@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 
 namespace VolvoFinalProject.Api.Repository.Repositories
 {
@@ -17,6 +16,19 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             _context = context;
         }
 
+        public async Task<ICollection<Employee>> GetEmployeesByDealer(int dealerId)
+        {
+            var employee = await _context.Employees
+                .Where(e => e.DealerFK == dealerId)
+                .ToListAsync();
+
+            if (employee != null){
+                return employee;
+            }
+
+            throw new ErrorViewModel("Employee Not Found", $"Employee not found at DealerID {dealerId}");
+        }
+        
         public async Task<Dealer> AddEntity(Dealer entity)
         {
             await _context.Set<Dealer>().AddAsync(entity);
@@ -59,6 +71,9 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
             throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
         }
+
+      
+
 
         public async Task<Dealer> UpdateEntity(int id, Dealer entity)
         {

@@ -23,29 +23,53 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public Task<PartsDTO> AddEntity(PartsDTO entity)
+
+        public async Task<PartsDTO> AddEntity(PartsDTO entity)
         {
-            throw new NotImplementedException();
+            var Parts = _mapper.Map<Parts>(entity);
+            var IncludedParts = await _repository.AddEntity(Parts);
+            return _mapper.Map<PartsDTO>(IncludedParts);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingParts= await _repository.GetOneEntity(id);
+
+            if (existingParts == null)
+            {
+                throw new ErrorViewModel("Parts Not Found", $"Parts with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                var deletedPartsDTO = _mapper.Map<PartsDTO>(existingParts);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Parts", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<PartsDTO>> GetAllEntity()
+        public async Task<ICollection<PartsDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Partss = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<PartsDTO>>(Parts);
         }
 
-        public Task<PartsDTO> GetOneEntity(int id)
+        public async Task<PartsDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Parts = await _repository.GetOneEntity(id);
+            return _mapper.Map<PartsDTO>(Parts);
         }
 
-        public Task<PartsDTO> UpdateEntity(int id, PartsDTO entity)
+        public async Task<PartsDTO> UpdateEntity(int id, PartsDTO entity)
         {
-            throw new NotImplementedException();
+            var Parts = _mapper.Map<Parts>(entity);
+            var UptadedParts = await _repository.UpdateEntity(Parts.PartsID, Parts);
+            return _mapper.Map<PartsDTO>(UptadedParts);
         }
+
     }
 }

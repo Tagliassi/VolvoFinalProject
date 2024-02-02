@@ -20,6 +20,13 @@ namespace VolvoFinalProject.Api.Model.Models.Enum
         [Description("Atualizações de software")]
         SoftwareUpdates = 7,
         [Description("Atualizações de I-shift")]
-        IShiftUpadate = 8
+        IShiftUpadate = 8,
+        [Description("Serviço Extra")]
+        IShiftUpadate = 9,
+        [Description("Recepcionar o Cliente")]
+        IShiftUpadate = 10,
+        [Description("Validar a disponibilidade da peça")]
+        IShiftUpadate = 11       
+
     }
 }

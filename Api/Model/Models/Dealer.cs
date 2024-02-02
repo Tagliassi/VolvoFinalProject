@@ -21,8 +21,8 @@ namespace VolvoFinalProject.Api.Model.Models
         public int? ServiceFK { get; set; }
         [ForeignKey("EmployeeID")] 
         public int? EmployeeFK { get; set; }
-        [ForeignKey("CostumerID")] 
-        public int? CostumerFK { get; set; }   
+        [ForeignKey("CustomerID")] 
+        public int? CustomerFK { get; set; }   
         [MaxLength(18)]
         [Required]
         public string CNPJ { get; set; } = string.Empty;

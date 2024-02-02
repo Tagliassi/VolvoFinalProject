@@ -23,29 +23,51 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public Task<VehicleDTO> AddEntity(VehicleDTO entity)
+        public async Task<VehicleDTO> AddEntity(VehicleDTO entity)
         {
-            throw new NotImplementedException();
+            var Vehicle = _mapper.Map<Vehicle>(entity);
+            var IncludedVehicle = await _repository.AddEntity(Vehicle);
+            return _mapper.Map<VehicleDTO>(IncludedVehicle);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingVehicle= await _repository.GetOneEntity(id);
+
+            if (existingVehicle == null)
+            {
+                throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                var deletedVehicleDTO = _mapper.Map<VehicleDTO>(existingVehicle);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Vehicle", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<VehicleDTO>> GetAllEntity()
+        public async Task<ICollection<VehicleDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Vehicles = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<VehicleDTO>>(Vehicles);
         }
 
-        public Task<VehicleDTO> GetOneEntity(int id)
+        public async Task<VehicleDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Vehicle = await _repository.GetOneEntity(id);
+            return _mapper.Map<VehicleDTO>(Vehicle);
         }
 
-        public Task<VehicleDTO> UpdateEntity(int id, VehicleDTO entity)
+        public async Task<VehicleDTO> UpdateEntity(int id, VehicleDTO entity)
         {
-            throw new NotImplementedException();
+            var Vehicle = _mapper.Map<Vehicle>(entity);
+            var UptadedVehicle = await _repository.UpdateEntity(Vehicle.VehicleID, Vehicle);
+            return _mapper.Map<VehicleDTO>(UptadedVehicle);
         }
     }
 }

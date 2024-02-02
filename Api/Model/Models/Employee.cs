@@ -23,10 +23,10 @@ namespace VolvoFinalProject.Api.Model.Models
         public int ServiceFK { get; set; }
         [ForeignKey("ContactID")] 
         public int ContactFK { get; set; }
-        public float Salary { get; set; }
+        public double Salary { get; set; }
         [Required]
-        public float BaseSalary { get; set; }
-        public float Commission { get; set; }
+        public double BaseSalary { get; set; }
+        public double Commission { get; set; }
         [MaxLength(11)]
         [Required]
         public string CPF { get; set; } = string.Empty;

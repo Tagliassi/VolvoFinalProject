@@ -23,30 +23,53 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
-        
-        public Task<DealerDTO> AddEntity(DealerDTO entity)
+
+                public async Task<DealerDTO> AddEntity(DealerDTO entity)
         {
-            throw new NotImplementedException();
+            var Dealer = _mapper.Map<Dealer>(entity);
+            var IncludedDealer = await _repository.AddEntity(Dealer);
+            return _mapper.Map<DealerDTO>(IncludedDealer);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingDealer= await _repository.GetOneEntity(id);
+
+            if (existingDealer == null)
+            {
+                throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                var deletedDealerDTO = _mapper.Map<DealerDTO>(existingDealer);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Dealer", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<DealerDTO>> GetAllEntity()
+        public async Task<ICollection<DealerDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Dealers = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<DealerDTO>>(Dealers);
         }
 
-        public Task<DealerDTO> GetOneEntity(int id)
+        public async Task<DealerDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Dealer = await _repository.GetOneEntity(id);
+            return _mapper.Map<DealerDTO>(Dealer);
         }
 
-        public Task<DealerDTO> UpdateEntity(int id, DealerDTO entity)
+        public async Task<DealerDTO> UpdateEntity(int id, DealerDTO entity)
         {
-            throw new NotImplementedException();
-        }
+            var Dealer = _mapper.Map<Dealer>(entity);
+            var UptadedDealer = await _repository.UpdateEntity(Dealer.DealerID, Dealer);
+            return _mapper.Map<DealerDTO>(UptadedDealer);
+        }       
+
     }
 }

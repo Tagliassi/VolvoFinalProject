@@ -24,30 +24,52 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _mapper = mapper;
         }
 
-        public Task<BillDTO> AddEntity(BillDTO entity)
+        public async Task<BillDTO> AddEntity(BillDTO entity)
         {
-            throw new NotImplementedException();
+            var Bill = _mapper.Map<Bill>(entity);
+            var IncludedBill = await _repository.AddEntity(Bill);
+            return _mapper.Map<BillDTO>(IncludedBill);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingBill = await _repository.GetOneEntity(id);
+
+            if (existingBill == null)
+            {
+                throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                //map the deleted entity to a DTO and return it
+                var deletedBill = _mapper.Map<BillDTO>(existingBill);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Bill", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<BillDTO>> GetAllEntity()
+        public async Task<ICollection<BillDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Bills = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<BillDTO>>(Bills);
         }
 
-        public Task<BillDTO> GetOneEntity(int id)
+        public async Task<BillDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Bills = await _repository.GetOneEntity(id);
+            return _mapper.Map<BillDTO>(Bills);
         }
 
-        public Task<BillDTO> UpdateEntity(int id, BillDTO entity)
+        public async Task<BillDTO> UpdateEntity(int id, BillDTO entity)
         {
-            throw new NotImplementedException();
+            var Bill = _mapper.Map<Bill>(entity);
+            var UptadedBill = await _repository.UpdateEntity(Bill.BillID, Bill);
+            return _mapper.Map<BillDTO>(UptadedBill);
         }
     }
 }
-

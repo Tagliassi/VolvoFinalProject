@@ -23,8 +23,8 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int? ServiceFK { get; set; }
         [ForeignKey("EmployeeID")] 
         public int? EmployeeFK { get; set; }
-        [ForeignKey("CostumerID")] 
-        public int? CostumerFK { get; set; }   
+        [ForeignKey("CustomerID")] 
+        public int? CustomerFK { get; set; }   
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
         [Required(ErrorMessage = "O nome é obrigatório.")]
         public string Name { get; set; } = string.Empty;

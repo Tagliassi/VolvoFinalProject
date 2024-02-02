@@ -6,6 +6,6 @@ namespace VolvoFinalProject.Api.DTOService.Interfaces
 {
     public interface IBillService : IBaseService<BillDTO>
     {
-        Task<Bill> CreateBill(BillDTO dto);
+
     }
 }

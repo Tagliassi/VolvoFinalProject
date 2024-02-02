@@ -23,29 +23,57 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public Task<ServiceDTO> AddEntity(ServiceDTO entity)
+
+        public async Task<ServiceDTO> AddEntity(ServiceDTO entity)
         {
-            throw new NotImplementedException();
+            var Service = _mapper.Map<Service>(entity);
+            var IncludedService = await _repository.AddEntity(Service);
+            return _mapper.Map<ServiceDTO>(IncludedService);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingService= await _repository.GetOneEntity(id);
+
+            if (existingService == null)
+            {
+                throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                var deletedServiceDTO = _mapper.Map<ServiceDTO>(existingService);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Service", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<ServiceDTO>> GetAllEntity()
+        public async Task<ICollection<ServiceDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Services = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<ServiceDTO>>(Services);
         }
 
-        public Task<ServiceDTO> GetOneEntity(int id)
+        public async Task<ServiceDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Service = await _repository.GetOneEntity(id);
+            return _mapper.Map<ServiceDTO>(Service);
         }
 
-        public Task<ServiceDTO> UpdateEntity(int id, ServiceDTO entity)
+        public async Task<ServiceDTO> UpdateEntity(int id, ServiceDTO entity)
         {
-            throw new NotImplementedException();
+            var Service = _mapper.Map<Service>(entity);
+            var UptadedService = await _repository.UpdateEntity(Service.ServiceID, Service);
+            return _mapper.Map<ServiceDTO>(UptadedService);
+        }
+
+        public async Task<Service> CreateService()
+        {
+            
         }
     }
 }

@@ -7,9 +7,5 @@ namespace VolvoFinalProject.Api.Repository.Interfaces
     public interface IEmployeeRepository : IBaseRepository<Employee>
     {
         Task<IEnumerable<Service>> GetServicesByEmployee(int employeeId);
-
-        Task<Employee> DeleteEntity(Employee employee);
-        object DeleteEntity(EmployeeDTO entity);
-
     }
 }

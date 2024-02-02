@@ -12,7 +12,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     public class PartsRepository : IPartsRepository
     {
         private ProjectContext _context;
-        private bool disposed = false;
 
         public PartsRepository(ProjectContext context)
         {

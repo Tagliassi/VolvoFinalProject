@@ -24,29 +24,52 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _mapper = mapper;
         }
         
-        public Task<CategoryServiceDTO> AddEntity(CategoryServiceDTO entity)
+        public async Task<CategoryServiceDTO> AddEntity(CategoryServiceDTO entity)
         {
-            throw new NotImplementedException();
+            var CategoryService = _mapper.Map<CategoryService>(entity);
+            var IncludedCategoryService= await _repository.AddEntity(CategoryService);
+            return _mapper.Map<CategoryServiceDTO>(IncludedCategoryService);
         }
 
-        public Task DeleteEntity(int id)
+        public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingCategoryService = await _repository.GetOneEntity(id);
+
+            if (existingCategoryService == null)
+            {
+                throw new ErrorViewModel("CategoryService Not Found", $"CategoryService with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                //map the deleted entity to a DTO and return it
+                var deletedCategoryService = _mapper.Map<CategoryServiceDTO>(existingCategoryService);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting CategoryService", $"{ex.Message}");
+            }
         }
 
-        public Task<ICollection<CategoryServiceDTO>> GetAllEntity()
+        public async Task<ICollection<CategoryServiceDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var CategoryServices = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<CategoryServiceDTO>>(CategoryServices);
         }
 
-        public Task<CategoryServiceDTO> GetOneEntity(int id)
+        public async Task<CategoryServiceDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var CategoryService = await _repository.GetOneEntity(id);
+            return _mapper.Map<CategoryServiceDTO>(CategoryService);
         }
 
-        public Task<CategoryServiceDTO> UpdateEntity(int id, CategoryServiceDTO entity)
+        public async Task<CategoryServiceDTO> UpdateEntity(int id, CategoryServiceDTO entity)
         {
-            throw new NotImplementedException();
+            var CategoryService = _mapper.Map<CategoryService>(entity);
+            var UptadedCategoryService = await _repository.UpdateEntity(CategoryService.CategoryServiceID, CategoryService);
+            return _mapper.Map<CategoryServiceDTO>(UptadedCategoryService);
         }
     }
 }

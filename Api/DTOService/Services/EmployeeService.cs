@@ -31,6 +31,28 @@ namespace VolvoFinalProject.Api.DTOService.Services
             return _mapper.Map<EmployeeDTO>(IncludedEmployee);
         }
 
+        public async Task DeleteEntity(int id)
+        {
+            var existingEmployee = await _repository.GetOneEntity(id);
+
+            if (existingEmployee == null)
+            {
+                throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                //map the deleted entity to a DTO and return it
+                var deletedEmployeeDTO = _mapper.Map<EmployeeDTO>(existingEmployee);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Employee", $"{ex.Message}");
+            }
+        }
+
         public async Task<ICollection<EmployeeDTO>> GetAllEntity()
         {
             var Employees = await _repository.GetAllEntity();
@@ -48,6 +70,20 @@ namespace VolvoFinalProject.Api.DTOService.Services
             var Employee = _mapper.Map<Employee>(entity);
             var UptadedEmployee = await _repository.UpdateEntity(Employee.EmployeeID, Employee);
             return _mapper.Map<EmployeeDTO>(UptadedEmployee);
+        }
+
+        public async Task<double> CalculateSalary(Employee employee, CategoryService categoryService)
+        {
+            var salary = employee.BaseSalary;
+            var services = await _repository.GetServicesByEmployee(employee.EmployeeID);
+
+            foreach (var service in services)
+            {
+                var value = categoryService.Value * employee.Commission;
+                salary += value;
+            }
+
+            return salary;
         }
     }
 }

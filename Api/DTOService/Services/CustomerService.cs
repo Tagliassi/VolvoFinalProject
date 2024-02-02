@@ -23,30 +23,52 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
+
+        public async Task<CustomerDTO> AddEntity(CustomerDTO entity)
+        {
+            var Customer = _mapper.Map<Customer>(entity);
+            var IncludedCustomer = await _repository.AddEntity(Customer);
+            return _mapper.Map<CustomerDTO>(IncludedCustomer);
+        }
         
-        public Task<CustomerDTO> AddEntity(CustomerDTO entity)
+       public async Task DeleteEntity(int id)
         {
-            throw new NotImplementedException();
+            var existingCustomer= await _repository.GetOneEntity(id);
+
+            if (existingCustomer == null)
+            {
+                throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
+            }
+
+            try
+            {
+                await _repository.DeleteEntity(id);
+
+                var deletedCustomerDTO = _mapper.Map<CustomerDTO>(existingCustomer);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorViewModel("Error Deleting Customer", $"{ex.Message}");
+            }
         }
 
-        public Task DeleteEntity(int id)
+        public async Task<ICollection<CustomerDTO>> GetAllEntity()
         {
-            throw new NotImplementedException();
+            var Customers = await _repository.GetAllEntity();
+            return _mapper.Map<ICollection<CustomerDTO>>(Customers);
         }
 
-        public Task<ICollection<CustomerDTO>> GetAllEntity()
+        public async Task<CustomerDTO> GetOneEntity(int id)
         {
-            throw new NotImplementedException();
+            var Customer = await _repository.GetOneEntity(id);
+            return _mapper.Map<CustomerDTO>(Customer);
         }
 
-        public Task<CustomerDTO> GetOneEntity(int id)
+        public async Task<CustomerDTO> UpdateEntity(int id, CustomerDTO entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<CustomerDTO> UpdateEntity(int id, CustomerDTO entity)
-        {
-            throw new NotImplementedException();
+            var Customer = _mapper.Map<Customer>(entity);
+            var UptadedCustomer = await _repository.UpdateEntity(Customer.CustomerID, Customer);
+            return _mapper.Map<CustomerDTO>(UptadedCustomer);
         }
     }
 }

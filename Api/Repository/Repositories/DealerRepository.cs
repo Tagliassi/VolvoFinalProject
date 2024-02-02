@@ -14,7 +14,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         private ProjectContext _context;
         public DealerRepository(ProjectContext context)
         {
-            _context = _context;
+            _context = context;
         }
 
         public async Task<Dealer> AddEntity(Dealer entity)

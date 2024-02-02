@@ -50,18 +50,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
         }
 
-        public async Task<Employee> DeleteEntity(Employee employe)
-        {
-            var entity = await _context.Set<Employee>().FindAsync(employe);
-            if (entity != null)
-            {
-                _context.Set<Employee>().Remove(entity);
-                //await _context.SaveChangesAsync();
-            }
-
-            throw new ErrorViewModel("Employee Not Found", $"Employee {employe} not found.");
-        }
-
         public async Task<ICollection<Employee>> GetAllEntity()
         {
             var entities = await _context.Set<Employee>().ToListAsync<Employee>();

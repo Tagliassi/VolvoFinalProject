@@ -15,10 +15,10 @@ namespace VolvoFinalProject.Api.DTOService.Services
     public class BillService : IBillService
     {
         private readonly IBillRepository _repository;
-        private readonly CustomerRepository _customerRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public BillService(IBillRepository repository, IMapper mapper, CustomerRepository customerRepository)
+        public BillService(IBillRepository repository, IMapper mapper, ICustomerRepository customerRepository)
         {
             _repository = repository;
             _customerRepository = customerRepository;

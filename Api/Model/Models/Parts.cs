@@ -13,7 +13,6 @@ namespace VolvoFinalProject.Api.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
         public int PartID { get; set; }
         [Required]
         public int Quantity { get; set; }

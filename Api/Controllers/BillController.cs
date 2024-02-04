@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
+using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject.Api.Repository.Interfaces;
 
 namespace VolvoFinalProject.Api.Controllers
@@ -15,15 +16,15 @@ namespace VolvoFinalProject.Api.Controllers
     public class BillController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IBillRepository _billRepository;
         private readonly IBillService _billService;
+        private readonly IUnitOfWork _unitOfWork;
 
         // Constructor to initialize dependencies
-        public BillController(IBillRepository billRepository, IMapper mapper, IBillService billService)
+        public BillController(IMapper mapper, IBillService billService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _billRepository = billRepository;
-            _billService = billService ?? throw new ArgumentNullException(nameof(billService));
+            _billService = billService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/Bill
@@ -33,6 +34,7 @@ namespace VolvoFinalProject.Api.Controllers
         {
             var bills = await _billService.GetAllEntity();
             var billDTOs = _mapper.Map<IEnumerable<BillDTO>>(bills);
+            _unitOfWork.Commit();
             return Ok(billDTOs);
         }
 
@@ -43,6 +45,7 @@ namespace VolvoFinalProject.Api.Controllers
         {
             var bill = await _billService.GetOneEntity(id);
             var billDTO = _mapper.Map<BillDTO>(bill);
+            _unitOfWork.Commit();
             return Ok(billDTO);
         }
 
@@ -53,7 +56,9 @@ namespace VolvoFinalProject.Api.Controllers
         {
             var addedBill = await _billService.AddEntity(billDTO);
             var addedBillDTO = _mapper.Map<BillDTO>(addedBill);
-            return CreatedAtAction(nameof(GetBillById), new { id = addedBillDTO.BillID }, addedBillDTO);
+            //return CreatedAtAction(nameof(GetBillById), new { id = addedBillDTO.BillID }, addedBillDTO);
+            _unitOfWork.Commit();
+            return Ok(addedBillDTO);
         }
 
         // PUT: api/Bill/5
@@ -63,6 +68,7 @@ namespace VolvoFinalProject.Api.Controllers
         {
             var updatedBill = await _billService.UpdateEntity(id, billDTO);
             var updatedBillDTO = _mapper.Map<BillDTO>(updatedBill);
+            _unitOfWork.Commit();
             return Ok(updatedBillDTO);
         }
 
@@ -72,6 +78,7 @@ namespace VolvoFinalProject.Api.Controllers
         public async Task<ActionResult> DeleteBill(int id)
         {
             await _billService.DeleteEntity(id);
+            _unitOfWork.Commit();
             return NoContent();
         }
     }

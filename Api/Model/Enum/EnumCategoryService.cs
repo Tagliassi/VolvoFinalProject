@@ -22,11 +22,11 @@ namespace VolvoFinalProject.Api.Model.Models.Enum
         [Description("Atualizações de I-shift")]
         IShiftUpadate = 8,
         [Description("Serviço Extra")]
-        IShiftUpadate = 9,
+        ExtraService = 9,
         [Description("Recepcionar o Cliente")]
-        IShiftUpadate = 10,
+        WelcomeCustomer = 10,
         [Description("Validar a disponibilidade da peça")]
-        IShiftUpadate = 11       
+        PartAvailability = 11       
 
     }
 }

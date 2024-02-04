@@ -1,20 +1,28 @@
+dotnet new mvc
 dotnet new webapi
+
 dotnet dev-certs https --trust
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 dotnet add package Microsoft.EntityFrameworkCore.Tools
 dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
 dotnet add package Microsoft.EntityFrameworkCore.Relational
+dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Swashbuckle.AspNetCore
 dotnet add package Microsoft.Extensions.Logging.Console
-dotnet add package Microsoft.Extensions.Logging.File
 dotnet add package AutoMapper
-dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 8.0.1
 dotnet add package Serilog
 dotnet add package Serilog.AspNetCore
+dotnet add package Microsoft.Extensions.Hosting
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
 
+dotnet tool install --global dotnet-ef
+dotnet tool update --global dotnet-ef
+
+dotnet restore
+dotnet ef --version
+dotnet build
 
 dotnet ef migrations add CreateDatabase
-
 dotnet ef database update
 
 dotnet run

@@ -13,9 +13,9 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     {
         private ProjectContext _context;
 
-        private CustomerRepository _repository;
+        private ICustomerRepository _repository;
 
-        public ServiceRepository(ProjectContext context, CustomerRepository repository )
+        public ServiceRepository(ProjectContext context, ICustomerRepository repository )
         {
             _context = context;
             _repository = repository;

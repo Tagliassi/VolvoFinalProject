@@ -13,7 +13,6 @@ namespace VolvoFinalProject.Api.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
         public int BillID { get; set; }
         [ForeignKey("CustomerID")]
         public int CustomerFK { get; set; }

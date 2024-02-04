@@ -1,105 +1,90 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
-using VolvoFinalProject.Api.Repository;
-using VolvoFinalProject.Api.Middlewares;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using VolvoFinalProject.Api.AutoMappers;
-using AutoMapper;
-using VolvoFinalProject.Api.Repository.Interfaces;
-using VolvoFinalProject.Api.Repository.Repositories;
-using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Api.DTOService.Interfaces;
-using VolvoFinalProject.Api.DTOService.Services;
-using VolvoFinalProject.Api;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using VolvoFinalProject.Api.DTOService.Interfaces;
+using VolvoFinalProject.Api.DTOService.Services;
+using VolvoFinalProject.Api.Middlewares;
+using VolvoFinalProject.Api.Model.Models;
+using VolvoFinalProject.Api.Repository.Interfaces;
+using VolvoFinalProject.Api.Repository.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do Serilog
+builder.Services.AddDbContext<ProjectContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+// Configuration of Serilog
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console() // Log para o console
-    .WriteTo.File("C:\\VolvoFinalProject\\Api\\log.txt", rollingInterval: RollingInterval.Day) // Log para um arquivo com rotação diária
+    .WriteTo.Console() // Log to the console
+    .WriteTo.File("C:\\VolvoFinalProject\\Api\\log.txt", rollingInterval: RollingInterval.Day) // Log to a file with daily rotation
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-    .ReadFrom.Configuration(builder.Configuration) // Configurações do appsettings.json
+    .ReadFrom.Configuration(builder.Configuration) // Configuration from appsettings.json
     .MinimumLevel.ControlledBy(new Serilog.Core.LoggingLevelSwitch
     {
-        MinimumLevel = GetLogLevel() // Obtém o nível de detalhamento configurado
+        MinimumLevel = GetLogLevel() // Get the configured detail level
     })
     .CreateLogger();
 
-builder.Logging.ClearProviders(); // Remover os provedores padrão
-builder.Logging.AddSerilog(); // Adicionar o provedor Serilog
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Application Automapper
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-
-// Adicionar IConfiguration
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-// Configurar o logging
-builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
-builder.Logging.AddConsole();
-builder.Logging.AddSerilog();
+builder.Logging.ClearProviders(); // Remove default providers
+builder.Logging.AddSerilog(); // Add the Serilog provider
 
 LogEventLevel GetLogLevel()
 {
     var defaultLogLevel = LogEventLevel.Information;
 
-    // Obter o nível de detalhamento configurado no appsettings.json
+    // Get the detail level configured in appsettings.json
     var logLevel = builder.Configuration.GetValue<string>("Logging:LogLevel:Default");
 
     return Enum.TryParse<LogEventLevel>(logLevel, out var result) ? result : defaultLogLevel;
 }
 
-// Application Repositories.
-builder.Services.AddScoped<IBillRepository, BillRepository>();
-builder.Services.AddScoped<ICategoryServiceRepository, CategoryServiceRepository>();
-builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IDealerRepository, DealerRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IPartsRepository, PartsRepository>();
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
-builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-// Application Service.
-builder.Services.AddScoped<IBillService, BillService>();
-builder.Services.AddScoped<ICategoryServiceService, CategoryServiceService>();
-builder.Services.AddScoped<IContactsService, ContactsService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IPartsService, PartsService>();
-builder.Services.AddScoped<IServiceService, ServiceService>();
-builder.Services.AddScoped<IVehicleService, VehicleService>();
-
-// Add logging service
+// Configure services and application
 builder.Services.AddLogging();
-builder.Services.AddDbContext<ProjectContext>(opt => opt.UseSqlServer("VolvoFinalProject"));
 
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ICategoryServiceRepository, CategoryServiceRepository>();
+builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
+builder.Services.AddTransient<IBillRepository, BillRepository>();
+builder.Services.AddTransient<IContactsRepository, ContactsRepository>();
+builder.Services.AddTransient<IPartsRepository, PartsRepository>();
+builder.Services.AddTransient<IDealerRepository, DealerRepository>();
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<IVehicleRepository, VehicleRepository>();
+
+builder.Services.AddTransient<ICategoryServiceService, CategoryServiceService>();
+builder.Services.AddTransient<IServiceService, ServiceService>();
+builder.Services.AddTransient<IBillService, BillService>();
+builder.Services.AddTransient<IContactsService, ContactsService>();
+builder.Services.AddTransient<IPartsService, PartsService>();
+builder.Services.AddTransient<IDealerService, DealerService>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+builder.Services.AddTransient<ICustomerService, CustomerService>();
+builder.Services.AddTransient<IVehicleService, VehicleService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Configure the application using Startup class
 var app = builder.Build();
+var env = app.Environment;
 
-// Use Middleware 
 app.UseMiddleware<ErrorMiddleware>();
 
-if (app.Environment.IsDevelopment())
+if (env.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

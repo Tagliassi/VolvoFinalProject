@@ -15,7 +15,6 @@ namespace VolvoFinalProject.Api.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
         public int ContactsID { get; set; }
         public int AddressNumber { get; set; }  
         public string Email { get; set; } = null!;

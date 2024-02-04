@@ -22,11 +22,14 @@ namespace VolvoFinalProject.Api.Model.Models
         public virtual DbSet<Parts> Part { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
+
+        public ProjectContext()
+        {
+        }
        
         // Configuração do contexto
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\;Database=FinalProject;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True");
         }
     }
 }

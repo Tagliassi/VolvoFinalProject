@@ -20,7 +20,6 @@ namespace VolvoFinalProject.Api.Model.Models
         
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
         public int CategoryServiceID { get; set; }
         [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }

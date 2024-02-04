@@ -32,7 +32,10 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             {
                 serviceDetails.Add(service);
             }
-
+                if (serviceDetails.Count == 0)
+            {
+                throw new ErrorViewModel("Services Not Found", "No services found for the customer in the database.");
+            }
             return serviceDetails;
         }
 

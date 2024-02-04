@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject;
@@ -25,9 +23,21 @@ namespace VolvoFinalProject.Api.DTOService.Services
         
         public async Task<CategoryServiceDTO> AddEntity(CategoryServiceDTO entity)
         {
-            var CategoryService = _mapper.Map<CategoryService>(entity);
-            var IncludedCategoryService= await _repository.AddEntity(CategoryService);
-            return _mapper.Map<CategoryServiceDTO>(IncludedCategoryService);
+            var categoryService = _mapper.Map<CategoryService>(entity);
+
+            if (categoryService == null)
+            {
+                throw new Exception("Error mapping CategoryServiceDTO to CategoryService entity.");
+            }
+
+            var includedCategoryService = await _repository.AddEntity(categoryService);
+
+            if (includedCategoryService == null)
+            {
+                throw new Exception("Error adding CategoryService entity to the repository.");
+            }
+
+            return _mapper.Map<CategoryServiceDTO>(includedCategoryService);
         }
 
         public async Task DeleteEntity(int id)
@@ -39,36 +49,57 @@ namespace VolvoFinalProject.Api.DTOService.Services
                 throw new ErrorViewModel("CategoryService Not Found", $"CategoryService with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                //map the deleted entity to a DTO and return it
-                var deletedCategoryService = _mapper.Map<CategoryServiceDTO>(existingCategoryService);
-            }
-            catch (Exception ex)
+            var deletedCategoryService = _mapper.Map<CategoryServiceDTO>(existingCategoryService);
+
+            if (deletedCategoryService == null)
             {
-                throw new ErrorViewModel("Error Deleting CategoryService", $"{ex.Message}");
+                throw new Exception("Error mapping deleted CategoryService entity to CategoryServiceDTO.");
             }
         }
 
         public async Task<ICollection<CategoryServiceDTO>> GetAllEntity()
         {
-            var CategoryServices = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<CategoryServiceDTO>>(CategoryServices);
+            var categoryServices = await _repository.GetAllEntity();
+
+            if (categoryServices == null)
+            {
+                throw new Exception("Error getting all CategoryService entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<CategoryServiceDTO>>(categoryServices);
         }
 
         public async Task<CategoryServiceDTO> GetOneEntity(int id)
         {
-            var CategoryService = await _repository.GetOneEntity(id);
-            return _mapper.Map<CategoryServiceDTO>(CategoryService);
+            var categoryService = await _repository.GetOneEntity(id);
+
+            if (categoryService == null)
+            {
+                throw new ErrorViewModel("CategoryService Not Found", $"CategoryService with Id {id} not found.");
+            }
+
+            return _mapper.Map<CategoryServiceDTO>(categoryService);
         }
 
         public async Task<CategoryServiceDTO> UpdateEntity(int id, CategoryServiceDTO entity)
         {
-            var CategoryService = _mapper.Map<CategoryService>(entity);
-            var UptadedCategoryService = await _repository.UpdateEntity(CategoryService.CategoryServiceID, CategoryService);
-            return _mapper.Map<CategoryServiceDTO>(UptadedCategoryService);
+            var categoryService = _mapper.Map<CategoryService>(entity);
+
+            if (categoryService == null)
+            {
+                throw new Exception("Error mapping CategoryServiceDTO to CategoryService entity.");
+            }
+
+            var updatedCategoryService = await _repository.UpdateEntity(id, categoryService);
+
+            if (updatedCategoryService == null)
+            {
+                throw new Exception("Error updating CategoryService entity in the repository.");
+            }
+
+            return _mapper.Map<CategoryServiceDTO>(updatedCategoryService);
         }
     }
 }

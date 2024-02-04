@@ -19,30 +19,17 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<ICollection<Parts>> GetPartsByCategoryService(int CategoryServiceId)
         {
-            try
-            {
-                var categoryService = await _context.CategoryServices
-                    .Include(cs => cs.Parts)
-                    .FirstOrDefaultAsync(cs => cs.CategoryServiceID == CategoryServiceId);
+            var categoryService = await _context.CategoryServices
+                .Include(cs => cs.Parts)
+                .FirstOrDefaultAsync(cs => cs.CategoryServiceID == CategoryServiceId);
 
-                if (categoryService != null)
-                {
-                    return categoryService.Parts.ToList();
-                }
-
-                return new List<Parts>();
-                throw new ErrorViewModel("Parts Not Found", $"Parts with Id {CategoryServiceId} not found.");
-            }
-            catch (Exception ex)
-            {
-                throw new ErrorViewModel("Error Found", $"Error: {ex.Message}");
-            }
+            return categoryService?.Parts.ToList() ?? new List<Parts>();
         }
 
         public async Task<CategoryService> AddEntity(CategoryService entity)
         {
             await _context.Set<CategoryService>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -52,31 +39,25 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<CategoryService>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
+            else
+            {
+                throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
+            }
         }
 
         public async Task<ICollection<CategoryService>> GetAllEntity()
         {
-            var entities = await _context.Set<CategoryService>().ToListAsync<CategoryService>();
-            return entities;
+            return await _context.Set<CategoryService>().ToListAsync<CategoryService>();
         }
 
         public async Task<CategoryService> GetOneEntity(int id)
         {
-            var entity = await _context
+            return await _context
                 .Set<CategoryService>()
                 .Include("Service")
                 .SingleAsync(w => w.CategoryServiceID == id);
-
-            if (entity != null)
-            {
-                return entity;
-            }
-
-            throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
         }
 
         public async Task<CategoryService> UpdateEntity(int id, CategoryService entity)
@@ -89,7 +70,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 return entity;
             }
 
-            throw new ErrorViewModel("Service category Found", $"Service category with Id {id} not found.");
+            throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
         }
     }
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject;
@@ -25,49 +23,83 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task<CustomerDTO> AddEntity(CustomerDTO entity)
         {
-            var Customer = _mapper.Map<Customer>(entity);
-            var IncludedCustomer = await _repository.AddEntity(Customer);
-            return _mapper.Map<CustomerDTO>(IncludedCustomer);
+            var customer = _mapper.Map<Customer>(entity);
+
+            if (customer == null)
+            {
+                throw new Exception("Error mapping CustomerDTO to Customer entity.");
+            }
+
+            var includedCustomer = await _repository.AddEntity(customer);
+
+            if (includedCustomer == null)
+            {
+                throw new Exception("Error adding Customer entity to the repository.");
+            }
+
+            return _mapper.Map<CustomerDTO>(includedCustomer);
         }
-        
-       public async Task DeleteEntity(int id)
+
+        public async Task DeleteEntity(int id)
         {
-            var existingCustomer= await _repository.GetOneEntity(id);
+            var existingCustomer = await _repository.GetOneEntity(id);
 
             if (existingCustomer == null)
             {
                 throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                var deletedCustomerDTO = _mapper.Map<CustomerDTO>(existingCustomer);
-            }
-            catch (Exception ex)
+            var deletedCustomerDTO = _mapper.Map<CustomerDTO>(existingCustomer);
+
+            if (deletedCustomerDTO == null)
             {
-                throw new ErrorViewModel("Error Deleting Customer", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Customer entity to CustomerDTO.");
             }
         }
 
         public async Task<ICollection<CustomerDTO>> GetAllEntity()
         {
-            var Customers = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<CustomerDTO>>(Customers);
+            var customers = await _repository.GetAllEntity();
+
+            if (customers == null)
+            {
+                throw new Exception("Error getting all Customer entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<CustomerDTO>>(customers);
         }
 
         public async Task<CustomerDTO> GetOneEntity(int id)
         {
-            var Customer = await _repository.GetOneEntity(id);
-            return _mapper.Map<CustomerDTO>(Customer);
+            var customer = await _repository.GetOneEntity(id);
+
+            if (customer == null)
+            {
+                throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
+            }
+
+            return _mapper.Map<CustomerDTO>(customer);
         }
 
         public async Task<CustomerDTO> UpdateEntity(int id, CustomerDTO entity)
         {
-            var Customer = _mapper.Map<Customer>(entity);
-            var UptadedCustomer = await _repository.UpdateEntity(Customer.CustomerID, Customer);
-            return _mapper.Map<CustomerDTO>(UptadedCustomer);
+            var customer = _mapper.Map<Customer>(entity);
+
+            if (customer == null)
+            {
+                throw new Exception("Error mapping CustomerDTO to Customer entity.");
+            }
+
+            var updatedCustomer = await _repository.UpdateEntity(id, customer);
+
+            if (updatedCustomer == null)
+            {
+                throw new Exception("Error updating Customer entity in the repository.");
+            }
+
+            return _mapper.Map<CustomerDTO>(updatedCustomer);
         }
     }
 }

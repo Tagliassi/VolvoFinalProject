@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject;
@@ -25,9 +23,21 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task<EmployeeDTO> AddEntity(EmployeeDTO entity)
         {
-            var Employee = _mapper.Map<Employee>(entity);
-            var IncludedEmployee = await _repository.AddEntity(Employee);
-            return _mapper.Map<EmployeeDTO>(IncludedEmployee);
+            var employee = _mapper.Map<Employee>(entity);
+
+            if (employee == null)
+            {
+                throw new Exception("Error mapping EmployeeDTO to Employee entity.");
+            }
+
+            var includedEmployee = await _repository.AddEntity(employee);
+
+            if (includedEmployee == null)
+            {
+                throw new Exception("Error adding Employee entity to the repository.");
+            }
+
+            return _mapper.Map<EmployeeDTO>(includedEmployee);
         }
 
         public async Task DeleteEntity(int id)
@@ -39,36 +49,57 @@ namespace VolvoFinalProject.Api.DTOService.Services
                 throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                //map the deleted entity to a DTO and return it
-                var deletedEmployeeDTO = _mapper.Map<EmployeeDTO>(existingEmployee);
-            }
-            catch (Exception ex)
+            var deletedEmployeeDTO = _mapper.Map<EmployeeDTO>(existingEmployee);
+
+            if (deletedEmployeeDTO == null)
             {
-                throw new ErrorViewModel("Error Deleting Employee", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Employee entity to EmployeeDTO.");
             }
         }
 
         public async Task<ICollection<EmployeeDTO>> GetAllEntity()
         {
-            var Employees = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<EmployeeDTO>>(Employees);
+            var employees = await _repository.GetAllEntity();
+
+            if (employees == null)
+            {
+                throw new Exception("Error getting all Employee entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<EmployeeDTO>>(employees);
         }
 
         public async Task<EmployeeDTO> GetOneEntity(int id)
         {
-            var Employee = await _repository.GetOneEntity(id);
-            return _mapper.Map<EmployeeDTO>(Employee);
+            var employee = await _repository.GetOneEntity(id);
+
+            if (employee == null)
+            {
+                throw new ErrorViewModel("Employee Not Found", $"Employee with Id {id} not found.");
+            }
+
+            return _mapper.Map<EmployeeDTO>(employee);
         }
 
         public async Task<EmployeeDTO> UpdateEntity(int id, EmployeeDTO entity)
         {
-            var Employee = _mapper.Map<Employee>(entity);
-            var UptadedEmployee = await _repository.UpdateEntity(Employee.EmployeeID, Employee);
-            return _mapper.Map<EmployeeDTO>(UptadedEmployee);
+            var employee = _mapper.Map<Employee>(entity);
+
+            if (employee == null)
+            {
+                throw new Exception("Error mapping EmployeeDTO to Employee entity.");
+            }
+
+            var updatedEmployee = await _repository.UpdateEntity(employee.EmployeeID, employee);
+
+            if (updatedEmployee == null)
+            {
+                throw new Exception("Error updating Employee entity in the repository.");
+            }
+
+            return _mapper.Map<EmployeeDTO>(updatedEmployee);
         }
 
         public async Task<double> CalculateSalary(Employee employee, Service service)

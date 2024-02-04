@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject;
@@ -25,9 +23,21 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task<ContactsDTO> AddEntity(ContactsDTO entity)
         {
-            var Contacts = _mapper.Map<Contacts>(entity);
-            var IncludedContacts = await _repository.AddEntity(Contacts);
-            return _mapper.Map<ContactsDTO>(IncludedContacts);
+            var contacts = _mapper.Map<Contacts>(entity);
+
+            if (contacts == null)
+            {
+                throw new Exception("Error mapping ContactsDTO to Contacts entity.");
+            }
+
+            var includedContacts = await _repository.AddEntity(contacts);
+
+            if (includedContacts == null)
+            {
+                throw new Exception("Error adding Contacts entity to the repository.");
+            }
+
+            return _mapper.Map<ContactsDTO>(includedContacts);
         }
 
         public async Task DeleteEntity(int id)
@@ -39,36 +49,57 @@ namespace VolvoFinalProject.Api.DTOService.Services
                 throw new ErrorViewModel("Contacts Not Found", $"Contacts with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                //map the deleted entity to a DTO and return it
-                var deletedContacts = _mapper.Map<ContactsDTO>(existingContacts);
-            }
-            catch (Exception ex)
+            var deletedContacts = _mapper.Map<ContactsDTO>(existingContacts);
+
+            if (deletedContacts == null)
             {
-                throw new ErrorViewModel("Error Deleting Contacts", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Contacts entity to ContactsDTO.");
             }
         }
 
         public async Task<ICollection<ContactsDTO>> GetAllEntity()
         {
-            var Contacts = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<ContactsDTO>>(Contacts);
+            var contacts = await _repository.GetAllEntity();
+
+            if (contacts == null)
+            {
+                throw new Exception("Error getting all Contacts entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<ContactsDTO>>(contacts);
         }
 
         public async Task<ContactsDTO> GetOneEntity(int id)
         {
-            var Contacts = await _repository.GetOneEntity(id);
-            return _mapper.Map<ContactsDTO>(Contacts);
+            var contacts = await _repository.GetOneEntity(id);
+
+            if (contacts == null)
+            {
+                throw new ErrorViewModel("Contacts Not Found", $"Contacts with Id {id} not found.");
+            }
+
+            return _mapper.Map<ContactsDTO>(contacts);
         }
 
         public async Task<ContactsDTO> UpdateEntity(int id, ContactsDTO entity)
         {
-            var Contacts = _mapper.Map<Contacts>(entity);
-            var UptadedContacts = await _repository.UpdateEntity(Contacts.ContactsID, Contacts);
-            return _mapper.Map<ContactsDTO>(UptadedContacts);
+            var contacts = _mapper.Map<Contacts>(entity);
+
+            if (contacts == null)
+            {
+                throw new Exception("Error mapping ContactsDTO to Contacts entity.");
+            }
+
+            var updatedContacts = await _repository.UpdateEntity(id, contacts);
+
+            if (updatedContacts == null)
+            {
+                throw new Exception("Error updating Contacts entity in the repository.");
+            }
+
+            return _mapper.Map<ContactsDTO>(updatedContacts);
         }
     }
 }

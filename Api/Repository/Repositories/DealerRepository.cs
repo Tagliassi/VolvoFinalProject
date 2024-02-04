@@ -22,13 +22,14 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 .Where(e => e.DealerFK == dealerId)
                 .ToListAsync();
 
-            if (employee != null){
+            if (employee != null)
+            {
                 return employee;
             }
 
             throw new ErrorViewModel("Employee Not Found", $"Employee not found at DealerID {dealerId}");
         }
-        
+
         public async Task<Dealer> AddEntity(Dealer entity)
         {
             await _context.Set<Dealer>().AddAsync(entity);
@@ -50,18 +51,17 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<ICollection<Dealer>> GetAllEntity()
         {
-            var entities = await _context.Set<Dealer>().ToListAsync<Dealer>();
-            return entities;
+            return await _context.Set<Dealer>().ToListAsync<Dealer>();
         }
 
         public async Task<Dealer> GetOneEntity(int id)
         {
             var entity = await _context
-                .Set<Dealer>()  
+                .Set<Dealer>()
                 .Include("Contact")
                 .Include("Service")
                 .Include("Employee")
-                .Include("Customer")     
+                .Include("Customer")
                 .SingleAsync(w => w.DealerID == id);
 
             if (entity != null)
@@ -71,9 +71,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
             throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
         }
-
-      
-
 
         public async Task<Dealer> UpdateEntity(int id, Dealer entity)
         {

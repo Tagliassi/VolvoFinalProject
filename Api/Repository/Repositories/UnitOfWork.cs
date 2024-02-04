@@ -22,7 +22,7 @@ namespace VolvoFinalProject.Api.Model.Models
 
         public void RollBack()
         {
-            throw new NotImplementedException();
+            throw new ErrorViewModel("Not Implemented RollBack", "NotImplementedException()");
         }
     }
 }

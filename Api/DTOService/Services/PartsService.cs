@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
-using VolvoFinalProject.Exceptions;
 using VolvoFinalProject;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
@@ -26,49 +23,83 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task<PartsDTO> AddEntity(PartsDTO entity)
         {
-            var Parts = _mapper.Map<Parts>(entity);
-            var IncludedParts = await _repository.AddEntity(Parts);
-            return _mapper.Map<PartsDTO>(IncludedParts);
+            var parts = _mapper.Map<Parts>(entity);
+
+            if (parts == null)
+            {
+                throw new Exception("Error mapping PartsDTO to Parts entity.");
+            }
+
+            var includedParts = await _repository.AddEntity(parts);
+
+            if (includedParts == null)
+            {
+                throw new Exception("Error adding Parts entity to the repository.");
+            }
+
+            return _mapper.Map<PartsDTO>(includedParts);
         }
 
         public async Task DeleteEntity(int id)
         {
-            var existingParts= await _repository.GetOneEntity(id);
+            var existingParts = await _repository.GetOneEntity(id);
 
             if (existingParts == null)
             {
                 throw new ErrorViewModel("Parts Not Found", $"Parts with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                var deletedPartsDTO = _mapper.Map<PartsDTO>(existingParts);
-            }
-            catch (Exception ex)
+            var deletedPartsDTO = _mapper.Map<PartsDTO>(existingParts);
+
+            if (deletedPartsDTO == null)
             {
-                throw new ErrorViewModel("Error Deleting Parts", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Parts entity to PartsDTO.");
             }
         }
 
         public async Task<ICollection<PartsDTO>> GetAllEntity()
         {
-            var Parts = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<PartsDTO>>(Parts);
+            var parts = await _repository.GetAllEntity();
+
+            if (parts == null)
+            {
+                throw new Exception("Error getting all Parts entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<PartsDTO>>(parts);
         }
 
         public async Task<PartsDTO> GetOneEntity(int id)
         {
-            var Parts = await _repository.GetOneEntity(id);
-            return _mapper.Map<PartsDTO>(Parts);
+            var parts = await _repository.GetOneEntity(id);
+
+            if (parts == null)
+            {
+                throw new ErrorViewModel("Parts Not Found", $"Parts with Id {id} not found.");
+            }
+
+            return _mapper.Map<PartsDTO>(parts);
         }
 
         public async Task<PartsDTO> UpdateEntity(int id, PartsDTO entity)
         {
-            var Parts = _mapper.Map<Parts>(entity);
-            var UptadedParts = await _repository.UpdateEntity(Parts.PartID, Parts);
-            return _mapper.Map<PartsDTO>(UptadedParts);
+            var parts = _mapper.Map<Parts>(entity);
+
+            if (parts == null)
+            {
+                throw new Exception("Error mapping PartsDTO to Parts entity.");
+            }
+
+            var updatedParts = await _repository.UpdateEntity(parts.PartID, parts);
+
+            if (updatedParts == null)
+            {
+                throw new Exception("Error updating Parts entity in the repository.");
+            }
+
+            return _mapper.Map<PartsDTO>(updatedParts);
         }
     }
 }

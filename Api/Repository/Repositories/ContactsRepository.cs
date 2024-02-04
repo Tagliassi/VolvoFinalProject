@@ -38,8 +38,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<ICollection<Contacts>> GetAllEntity()
         {
-            var entities = await _context.Set<Contacts>().ToListAsync<Contacts>();
-            return entities;
+            return await _context.Set<Contacts>().ToListAsync<Contacts>();
         }
 
         public async Task<Contacts> GetOneEntity(int id)

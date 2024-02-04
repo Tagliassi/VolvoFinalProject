@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -42,17 +43,38 @@ namespace VolvoFinalProject.Api.Middlewares
         {
             ErrorViewModel errorViewModel;
 
-            if (ex is FileNotFoundException fileNotFoundException)
+            if (ex is DbUpdateConcurrencyException concurrencyException)
+            {
+                // Tratamento específico para concorrência de dados
+                errorViewModel = new ErrorViewModel(HttpStatusCode.Conflict.ToString(), "Concurrency conflict occurred during database update.");
+                context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+            }
+            else if (ex is DbUpdateException dbUpdateException)
+            {
+                // Tratamento geral para falhas de atualização do banco de dados
+                errorViewModel = new ErrorViewModel(HttpStatusCode.InternalServerError.ToString(), "Database update error occurred.");
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                // Registra a exceção para diagnóstico
+                logger.LogError(dbUpdateException, "Database update error occurred.");
+            }
+            else if (ex is FileNotFoundException fileNotFoundException)
             {
                 // Tratamento específico para FileNotFoundException
-                errorViewModel = new ErrorViewModel(HttpStatusCode.NotFound.ToString(), $"Arquivo não encontrado: {fileNotFoundException.FileName}");
+                errorViewModel = new ErrorViewModel(HttpStatusCode.NotFound.ToString(), $"File not found: {fileNotFoundException.FileName}");
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
             else if (ex is UnauthorizedAccessException unauthorizedAccessException)
             {
                 // Tratamento específico para UnauthorizedAccessException
-                errorViewModel = new ErrorViewModel(HttpStatusCode.Forbidden.ToString(), "Acesso não autorizado.");
+                errorViewModel = new ErrorViewModel(HttpStatusCode.Forbidden.ToString(), "Unauthorized access.");
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            }
+            else if (ex is ErrorViewModel errorViewModelException)
+            {
+                // Tratamento para exceções do tipo ErrorViewModel lançadas pelos repositórios
+                errorViewModel = errorViewModelException;
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             else
             {
@@ -68,9 +90,12 @@ namespace VolvoFinalProject.Api.Middlewares
                         "An internal server error has occurred.");
                 }
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                // Registra a exceção para diagnóstico
+                logger.LogError(ex, "Unhandled error occurred.");
             }
 
-            // Log the error using ILogger for further analysis.
+            // Loga o erro usando ILogger para análises adicionais.
             LogErrorWithContext(ex, context);
 
             var result = JsonConvert.SerializeObject(errorViewModel, new JsonSerializerSettings

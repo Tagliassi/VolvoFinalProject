@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
 using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject;
@@ -11,8 +10,9 @@ using AutoMapper;
 
 namespace VolvoFinalProject.Api.DTOService.Services
 {
-
+    /// <summary>
     /// Service class responsible for handling operations related to the Dealer entity.
+    /// </summary>
     public class DealerService : IDealerService
     {
         private readonly IDealerRepository _repository;
@@ -31,9 +31,21 @@ namespace VolvoFinalProject.Api.DTOService.Services
         /// <returns>DTO representing the added Dealer.</returns>
         public async Task<DealerDTO> AddEntity(DealerDTO entity)
         {
-            var Dealer = _mapper.Map<Dealer>(entity);
-            var IncludedDealer = await _repository.AddEntity(Dealer);
-            return _mapper.Map<DealerDTO>(IncludedDealer);
+            var dealer = _mapper.Map<Dealer>(entity);
+
+            if (dealer == null)
+            {
+                throw new Exception("Error mapping DealerDTO to Dealer entity.");
+            }
+
+            var includedDealer = await _repository.AddEntity(dealer);
+
+            if (includedDealer == null)
+            {
+                throw new Exception("Error adding Dealer entity to the repository.");
+            }
+
+            return _mapper.Map<DealerDTO>(includedDealer);
         }
 
         public async Task DeleteEntity(int id)
@@ -45,35 +57,56 @@ namespace VolvoFinalProject.Api.DTOService.Services
                 throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
             }
 
-            DealerDTO? deletedDealerDTO = null;
+            await _repository.DeleteEntity(id);
 
-            try
+            var deletedDealerDTO = _mapper.Map<DealerDTO>(existingDealer);
+
+            if (deletedDealerDTO == null)
             {
-                await _repository.DeleteEntity(id);
-                deletedDealerDTO = _mapper.Map<DealerDTO>(existingDealer);
+                throw new Exception("Error mapping deleted Dealer entity to DealerDTO.");
             }
-            catch (Exception ex)
-            {
-                throw new ErrorViewModel("Error Deleting Dealer", ex.Message);
-            }  
         }
 
         public async Task<ICollection<DealerDTO>> GetAllEntity()
         {
-            var Dealers = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<DealerDTO>>(Dealers);
+            var dealers = await _repository.GetAllEntity();
+
+            if (dealers == null)
+            {
+                throw new Exception("Error getting all Dealer entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<DealerDTO>>(dealers);
         }
 
         public async Task<DealerDTO> GetOneEntity(int id)
         {
-            var Dealer = await _repository.GetOneEntity(id);
-            return _mapper.Map<DealerDTO>(Dealer);
+            var dealer = await _repository.GetOneEntity(id);
+
+            if (dealer == null)
+            {
+                throw new ErrorViewModel("Dealer Not Found", $"Dealer with Id {id} not found.");
+            }
+
+            return _mapper.Map<DealerDTO>(dealer);
         }
-        
+
         public async Task<DealerDTO> UpdateEntity(int id, DealerDTO entity)
         {
             var dealer = _mapper.Map<Dealer>(entity);
+
+            if (dealer == null)
+            {
+                throw new Exception("Error mapping DealerDTO to Dealer entity.");
+            }
+
             var updatedDealer = await _repository.UpdateEntity(id, dealer);
+
+            if (updatedDealer == null)
+            {
+                throw new Exception("Error updating Dealer entity in the repository.");
+            }
+
             return _mapper.Map<DealerDTO>(updatedDealer);
         }      
     }

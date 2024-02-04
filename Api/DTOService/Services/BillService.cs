@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VolvoFinalProject.Api.Repository.Interfaces;
@@ -19,13 +18,14 @@ namespace VolvoFinalProject.Api.DTOService.Services
         private readonly CustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public BillService(IBillRepository repository, IMapper mapper,CustomerRepository customerRepository)
+        public BillService(IBillRepository repository, IMapper mapper, CustomerRepository customerRepository)
         {
             _repository = repository;
             _customerRepository = customerRepository;
             _mapper = mapper;
         }
 
+        // Calculate total bill for a customer based on services
         public async Task<double> CalculateBill(Customer customer)
         {
             var bill = 0.0;
@@ -38,13 +38,29 @@ namespace VolvoFinalProject.Api.DTOService.Services
             return bill;
         }
 
+        // Add a new Bill entity
         public async Task<BillDTO> AddEntity(BillDTO entity)
         {
-            var Bill = _mapper.Map<Bill>(entity);
-            var IncludedBill = await _repository.AddEntity(Bill);
-            return _mapper.Map<BillDTO>(IncludedBill);
+            var bill = _mapper.Map<Bill>(entity);
+
+            // Validate entity after mapping
+            if (bill == null)
+            {
+                throw new Exception("Error mapping BillDTO to Bill entity.");
+            }
+
+            var includedBill = await _repository.AddEntity(bill);
+
+            // Validate entity after addition
+            if (includedBill == null)
+            {
+                throw new Exception("Error adding Bill entity to the repository.");
+            }
+
+            return _mapper.Map<BillDTO>(includedBill);
         }
 
+        // Delete a Bill entity by ID
         public async Task DeleteEntity(int id)
         {
             var existingBill = await _repository.GetOneEntity(id);
@@ -54,36 +70,65 @@ namespace VolvoFinalProject.Api.DTOService.Services
                 throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                //map the deleted entity to a DTO and return it
-                var deletedBill = _mapper.Map<BillDTO>(existingBill);
-            }
-            catch (Exception ex)
+            // Map the deleted entity to a DTO
+            var deletedBill = _mapper.Map<BillDTO>(existingBill);
+
+            // Validate entity after mapping
+            if (deletedBill == null)
             {
-                throw new ErrorViewModel("Error Deleting Bill", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Bill entity to BillDTO.");
             }
         }
 
+        // Get all Bill entities
         public async Task<ICollection<BillDTO>> GetAllEntity()
         {
-            var Bills = await _repository.GetAllEntity();
-            return _mapper.Map<ICollection<BillDTO>>(Bills);
+            var bills = await _repository.GetAllEntity();
+
+            // Validate entity after retrieval
+            if (bills == null)
+            {
+                throw new Exception("Error getting all Bill entities from the repository.");
+            }
+
+            return _mapper.Map<ICollection<BillDTO>>(bills);
         }
 
+        // Get a specific Bill entity by ID
         public async Task<BillDTO> GetOneEntity(int id)
         {
-            var Bills = await _repository.GetOneEntity(id);
-            return _mapper.Map<BillDTO>(Bills);
+            var bill = await _repository.GetOneEntity(id);
+
+            if (bill == null)
+            {
+                throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
+            }
+
+            return _mapper.Map<BillDTO>(bill);
         }
 
+        // Update a Bill entity by ID
         public async Task<BillDTO> UpdateEntity(int id, BillDTO entity)
         {
-            var Bill = _mapper.Map<Bill>(entity);
-            var UptadedBill = await _repository.UpdateEntity(Bill.BillID, Bill);
-            return _mapper.Map<BillDTO>(UptadedBill);
+            var bill = _mapper.Map<Bill>(entity);
+
+            // Validate entity after mapping
+            if (bill == null)
+            {
+                throw new Exception("Error mapping BillDTO to Bill entity.");
+            }
+
+            var updatedBill = await _repository.UpdateEntity(id, bill);
+
+            // Validate entity after update
+            if (updatedBill == null)
+            {
+                throw new Exception("Error updating Bill entity in the repository.");
+            }
+
+            return _mapper.Map<BillDTO>(updatedBill);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _repository = repository;
             _mapper = mapper;
         }
+        
         public async Task<VehicleDTO> AddEntity(VehicleDTO entity)
         {
             var Vehicle = _mapper.Map<Vehicle>(entity);
@@ -31,22 +32,20 @@ namespace VolvoFinalProject.Api.DTOService.Services
 
         public async Task DeleteEntity(int id)
         {
-            var existingVehicle= await _repository.GetOneEntity(id);
+            var existingVehicle = await _repository.GetOneEntity(id);
 
             if (existingVehicle == null)
             {
                 throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
             }
 
-            try
-            {
-                await _repository.DeleteEntity(id);
+            await _repository.DeleteEntity(id);
 
-                var deletedVehicleDTO = _mapper.Map<VehicleDTO>(existingVehicle);
-            }
-            catch (Exception ex)
+            var deletedVehicleDTO = _mapper.Map<VehicleDTO>(existingVehicle);
+
+            if (deletedVehicleDTO == null)
             {
-                throw new ErrorViewModel("Error Deleting Vehicle", $"{ex.Message}");
+                throw new Exception("Error mapping deleted Vehicle to DTO.");
             }
         }
 
@@ -65,8 +64,14 @@ namespace VolvoFinalProject.Api.DTOService.Services
         public async Task<VehicleDTO> UpdateEntity(int id, VehicleDTO entity)
         {
             var Vehicle = _mapper.Map<Vehicle>(entity);
-            var UptadedVehicle = await _repository.UpdateEntity(Vehicle.VehicleID, Vehicle);
-            return _mapper.Map<VehicleDTO>(UptadedVehicle);
+            var UpdatedVehicle = await _repository.UpdateEntity(id, Vehicle);
+
+            if (UpdatedVehicle == null)
+            {
+                throw new Exception("Error updating Vehicle entity.");
+            }
+
+            return _mapper.Map<VehicleDTO>(UpdatedVehicle);
         }
     }
 }

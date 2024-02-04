@@ -23,7 +23,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 .Where(s => s.EmployeeFK == employeeId)
                 .ToListAsync();
 
-            if (service != null){
+            if (service != null)
+            {
                 return service;
             }
 
@@ -51,8 +52,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<ICollection<Employee>> GetAllEntity()
         {
-            var entities = await _context.Set<Employee>().ToListAsync<Employee>();
-            return entities;
+            return await _context.Set<Employee>().ToListAsync<Employee>();
         }
 
         public async Task<Employee> GetOneEntity(int id)

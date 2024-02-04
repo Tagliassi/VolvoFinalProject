@@ -38,14 +38,13 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<ICollection<Parts>> GetAllEntity()
         {
-            var entities = await _context.Set<Parts>().ToListAsync<Parts>();
-            return entities;
+            return await _context.Set<Parts>().ToListAsync<Parts>();
         }
 
         public async Task<Parts> GetOneEntity(int id)
         {
             var entity = await _context
-                .Set<Parts>()         
+                .Set<Parts>()
                 .SingleAsync(w => w.PartID == id);
 
             if (entity != null)
@@ -67,6 +66,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             }
 
             throw new ErrorViewModel("Part Not Found", $"Part with Id {id} not found.");
-        } 
+        }
     }
 }

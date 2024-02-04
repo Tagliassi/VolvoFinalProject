@@ -11,6 +11,10 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     public class VehicleRepository : IVehicleRepository
     {
         private ProjectContext _context;
+        public VehicleRepository(ProjectContext context)
+        {
+            _context = context;
+        }
 
         public async Task<ICollection<Vehicle>> GetVehicleByKmAndSystemVersion(int km, string systemVersion)
         {
@@ -25,13 +29,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with km {km} System Version {systemVersion} not found.");
         }
 
-        public VehicleRepository(ProjectContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Vehicle> AddEntity(Vehicle entity)
-        {
+        { 
             await _context.Set<Vehicle>().AddAsync(entity);
             //await _context.SaveChangesAsync();
             return entity;
@@ -52,6 +51,10 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public async Task<ICollection<Vehicle>> GetAllEntity()
         {
             var entities = await _context.Set<Vehicle>().ToListAsync<Vehicle>();
+            if (entities.Count == 0)
+            {
+                throw new ErrorViewModel("Vehicles Not Found", "No vehicles found in the database.");
+            }
             return entities;
         }
 

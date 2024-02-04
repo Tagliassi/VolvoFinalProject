@@ -24,7 +24,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
 
         public async Task<List<Service>> GetServiceDetails(Customer customer)
         {
-            // Certifique-se de que GetServicesByCustomer retorna IEnumerable<Service>
             var services = await _repository.GetServicesByCustomer(customer.CustomerID);
             var serviceDetails = new List<Service>();
 

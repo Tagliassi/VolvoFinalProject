@@ -22,7 +22,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 .Where(s => s.CustomerFK == customerId)
                 .ToListAsync();
 
-            if (services.Any())  // Verifica se há serviços encontrados
+            if (services.Any())
             {
                 return services;
             }

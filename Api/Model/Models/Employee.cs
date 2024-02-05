@@ -16,11 +16,8 @@ namespace VolvoFinalProject.Api.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeID { get; set; }
-        [ForeignKey("DealerID")] 
         public int DealerFK { get; set; }
-        [ForeignKey("ServiceID")]  
         public int ServiceFK { get; set; }
-        [ForeignKey("ContactID")] 
         public int ContactFK { get; set; }
         public double Salary { get; set; }
         [Required]
@@ -34,5 +31,13 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(50)]
         [Required]
         public EnumEmployees Employees { get; set; } 
+        [ForeignKey("DealerFK")] 
+        public Dealer? Dealer { get; set; }
+        [ForeignKey("ServiceFK")]  
+        public Service? Service { get; set; }
+        [ForeignKey("ContactFK")] 
+        public Contacts? Contacts { get; set; }
+
+        public ICollection<Dealer>? Dealers { get; set; }
     }
 }

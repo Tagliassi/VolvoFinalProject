@@ -11,8 +11,6 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class PartsDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PartID { get; set; }
         [Required(ErrorMessage = "A quantidade de peças é obrigatória.")]
         public int Quantity { get; set; }

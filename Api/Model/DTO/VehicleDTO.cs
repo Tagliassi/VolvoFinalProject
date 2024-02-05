@@ -11,12 +11,8 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class VehicleDTO
     {    
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VehicleID { get; set; }
-        [ForeignKey("CustomerID")]
         public int CustomerFK { get; set; }
-        [ForeignKey("serviceID")]
         public int ServiceFK { get; set; }
         [Required(ErrorMessage = "O número do chassi é obrigatório.")]
         public int ChassisNumber { get; set; }  

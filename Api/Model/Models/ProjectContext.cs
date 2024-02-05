@@ -31,5 +31,43 @@ namespace VolvoFinalProject.Api.Model.Models
         public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Bill>()
+                .HasOne(b => b.Customer)
+                .WithMany(c => c.Bills)
+                .HasForeignKey(b => b.CustomerFK);
+
+            modelBuilder.Entity<CategoryService>()
+                .HasOne(cs => cs.Service)
+                .WithMany(s => s.CategoryServices)
+                .HasForeignKey(cs => cs.ServiceFK);
+            
+            modelBuilder.Entity<Customer>()
+                .HasOne(c => c.Service)
+                .WithMany(s => s.Customers)
+                .HasForeignKey(c => c.ServiceFK);
+            
+            modelBuilder.Entity<Vehicle>()
+                .HasOne(v => v.Customer)
+                .WithMany(c => c.Vehicles)
+                .HasForeignKey(v => v.CustomerFK);
+
+            modelBuilder.Entity<Dealer>()
+                .HasMany(d => d.Employees)
+                .WithOne(e => e.Dealer)
+                .HasForeignKey(e => e.DealerFK);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Service)
+                .WithMany(s => s.Employees)
+                .HasForeignKey(e => e.ServiceFK);
+
+            modelBuilder.Entity<Service>()
+                .HasOne(s => s.Vehicle)
+                .WithMany(v => v.Services)
+                .HasForeignKey(s => s.VehicleFK);
+        }
     }
 }

@@ -12,7 +12,7 @@ using VolvoFinalProject.Api.Model.Models;
 namespace VolvoFinalProject.Api.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20240204224255_CreateDatabase")]
+    [Migration("20240205143738_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -44,6 +44,10 @@ namespace VolvoFinalProject.Api.Migrations
 
                     b.HasKey("BillID");
 
+                    b.HasIndex("CustomerFK");
+
+                    b.HasIndex("ServiceFK");
+
                     b.ToTable("Bills");
                 });
 
@@ -70,6 +74,8 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CategoryServiceID");
+
+                    b.HasIndex("ServiceFK");
 
                     b.ToTable("CategoryServices");
                 });
@@ -159,6 +165,14 @@ namespace VolvoFinalProject.Api.Migrations
 
                     b.HasKey("CustomerID");
 
+                    b.HasIndex("BillFK");
+
+                    b.HasIndex("ContactFK");
+
+                    b.HasIndex("ServiceFK");
+
+                    b.HasIndex("VehicleFK");
+
                     b.ToTable("Customers");
                 });
 
@@ -175,13 +189,13 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)");
 
-                    b.Property<int?>("ContactFK")
+                    b.Property<int>("ContactFK")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CustomerFK")
+                    b.Property<int>("CustomerFK")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeFK")
+                    b.Property<int>("EmployeeFK")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -189,10 +203,18 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("ServiceFK")
+                    b.Property<int>("ServiceFK")
                         .HasColumnType("int");
 
                     b.HasKey("DealerID");
+
+                    b.HasIndex("ContactFK");
+
+                    b.HasIndex("CustomerFK");
+
+                    b.HasIndex("EmployeeFK");
+
+                    b.HasIndex("ServiceFK");
 
                     b.ToTable("Dealers");
                 });
@@ -238,6 +260,12 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("EmployeeID");
+
+                    b.HasIndex("ContactFK");
+
+                    b.HasIndex("DealerFK");
+
+                    b.HasIndex("ServiceFK");
 
                     b.ToTable("Employees");
                 });
@@ -302,6 +330,9 @@ namespace VolvoFinalProject.Api.Migrations
                     b.Property<int>("PartFK")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PartsFK")
+                        .HasColumnType("int");
+
                     b.Property<int>("Situation")
                         .HasColumnType("int");
 
@@ -312,6 +343,16 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServiceID");
+
+                    b.HasIndex("CategoryServiceFK");
+
+                    b.HasIndex("CustomerFK");
+
+                    b.HasIndex("EmployeeFK");
+
+                    b.HasIndex("PartsFK");
+
+                    b.HasIndex("VehicleFK");
 
                     b.ToTable("Services");
                 });
@@ -359,7 +400,138 @@ namespace VolvoFinalProject.Api.Migrations
 
                     b.HasKey("VehicleID");
 
+                    b.HasIndex("CustomerFK");
+
+                    b.HasIndex("ServiceFK");
+
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Bill", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Customer", "Customer")
+                        .WithMany("Bills")
+                        .HasForeignKey("CustomerFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.CategoryService", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany("CategoryServices")
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Customer", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Bill", "Bill")
+                        .WithMany()
+                        .HasForeignKey("BillFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Contacts", "Contacts")
+                        .WithMany()
+                        .HasForeignKey("ContactFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany("Customers")
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Vehicle", "Vehicle")
+                        .WithMany("Customers")
+                        .HasForeignKey("VehicleFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("Contacts");
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Dealer", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Contacts", "Contacts")
+                        .WithMany()
+                        .HasForeignKey("ContactFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Employee", "Employee")
+                        .WithMany("Dealers")
+                        .HasForeignKey("EmployeeFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contacts");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Employee", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Contacts", "Contacts")
+                        .WithMany()
+                        .HasForeignKey("ContactFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Dealer", "Dealer")
+                        .WithMany("Employees")
+                        .HasForeignKey("DealerFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany("Employees")
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contacts");
+
+                    b.Navigation("Dealer");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Parts", b =>
@@ -369,9 +541,102 @@ namespace VolvoFinalProject.Api.Migrations
                         .HasForeignKey("CategoryServiceID");
                 });
 
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Service", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.CategoryService", "CategoryService")
+                        .WithMany()
+                        .HasForeignKey("CategoryServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Parts", "Parts")
+                        .WithMany()
+                        .HasForeignKey("PartsFK");
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Vehicle", "Vehicle")
+                        .WithMany("Services")
+                        .HasForeignKey("VehicleFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoryService");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Parts");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Vehicle", b =>
+                {
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Customer", "Customer")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("CustomerFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VolvoFinalProject.Api.Model.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.CategoryService", b =>
                 {
                     b.Navigation("Parts");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Customer", b =>
+                {
+                    b.Navigation("Bills");
+
+                    b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Dealer", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Employee", b =>
+                {
+                    b.Navigation("Dealers");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Service", b =>
+                {
+                    b.Navigation("CategoryServices");
+
+                    b.Navigation("Customers");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("VolvoFinalProject.Api.Model.Models.Vehicle", b =>
+                {
+                    b.Navigation("Customers");
+
+                    b.Navigation("Services");
                 });
 #pragma warning restore 612, 618
         }

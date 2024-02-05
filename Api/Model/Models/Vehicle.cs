@@ -14,11 +14,9 @@ namespace VolvoFinalProject.Api.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VehicleID { get; set; }
-        [ForeignKey("CustomerID")]
-        public int CustomerFK { get; set; }
-        [ForeignKey("serviceID")]
-        public int ServiceFK { get; set; }
+        public int VehicleID { get; set; }        
+        public int CustomerFK { get; set; }       
+        public int ServiceFK { get; set; }        
         [Required]
         public int ChassisNumber { get; set; }  
         [Required]
@@ -35,5 +33,11 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(20)]   
         [Required]     
         public string SystemVersion { get; set; } = string.Empty;
+        [ForeignKey("CustomerFK")]
+        public Customer? Customer { get; set; }
+        [ForeignKey("ServiceFK")]
+        public Service? Service { get; set; }
+        public ICollection<Customer>? Customers { get; set; }
+        public ICollection<Service>? Services { get; set; }
     }
 }

@@ -12,12 +12,8 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class EmployeeDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeID { get; set; }
-        [ForeignKey("DealerID")] 
         public int DealerFK { get; set; }
-        [ForeignKey("ContactID")] 
         public int ContactFK { get; set; }
         public float Salary { get; set; }
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]

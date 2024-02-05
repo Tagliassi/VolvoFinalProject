@@ -12,8 +12,6 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class ContactsDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ContactsID { get; set; }
         public int AddressNumber { get; set; }  
         [MaxLength(11, ErrorMessage = "O valor máximo para o telefone é de 11 caracteres.")]

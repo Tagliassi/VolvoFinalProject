@@ -14,19 +14,24 @@ namespace VolvoFinalProject.Api.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DealerID { get; set; }
-        [ForeignKey("ContactsID")] 
-        public int? ContactFK { get; set; }
-        [ForeignKey("ServiceID")]  
-        public int? ServiceFK { get; set; }
-        [ForeignKey("EmployeeID")] 
-        public int? EmployeeFK { get; set; }
-        [ForeignKey("CustomerID")] 
-        public int? CustomerFK { get; set; }   
+        public int ContactFK { get; set; }
+        public int ServiceFK { get; set; }
+        public int EmployeeFK { get; set; }
+        public int CustomerFK { get; set; }   
         [MaxLength(18)]
         [Required]
         public string CNPJ { get; set; } = string.Empty;
         [MaxLength(100)]
         [Required]
         public string Name { get; set; } = string.Empty;
+        [ForeignKey("ContactFK")] 
+        public Contacts? Contacts { get; set; }
+        [ForeignKey("ServiceFK")]  
+        public Service? Service { get; set; }
+        [ForeignKey("EmployeeFK")] 
+        public Employee? Employee { get; set; }
+        [ForeignKey("CustomerFK")]   
+        public Customer? Customer { get; set; } 
+        public ICollection<Employee>? Employees { get; set; }
     }
 }

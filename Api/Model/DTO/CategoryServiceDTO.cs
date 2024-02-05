@@ -19,10 +19,7 @@ namespace VolvoFinalProject.Api.Model.DTO
             Parts = new HashSet<Parts>();
         }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryServiceID { get; set; }
-        [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }
         [MaxLength(100, ErrorMessage = "O valor máximo para a descrição é 100 caracteres.")]

@@ -13,12 +13,8 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class BillDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BillID { get; set; }
-        [ForeignKey("CustomerID")]
         public int CustomerFK { get; set; }
-        [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
         [Required(ErrorMessage = "O valor total é obrigatório.")]
         public double Amount { get; set; }

@@ -14,11 +14,13 @@ namespace VolvoFinalProject.Api.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BillID { get; set; }
-        [ForeignKey("CustomerID")]
         public int CustomerFK { get; set; }
-        [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
         [Required]
         public double Amount { get; set; } 
+        [ForeignKey("CustomerFK")]
+        public Customer? Customer { get; set; }
+        [ForeignKey("ServiceFK")]
+        public Service? Service { get; set; }
     }
 }

@@ -16,18 +16,18 @@ namespace VolvoFinalProject.Api.Model.Models
         public CategoryService()
         {
             Parts = new HashSet<Parts>();
-        }
-        
+        }        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryServiceID { get; set; }
-        [ForeignKey("ServiceID")]
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }        
         [MaxLength(100)]
         [Required]
         public string Description { get; set; } = string.Empty;
         public EnumCategoryService Category { get; set; } 
-        public ICollection<Parts> Parts { get; set; } 
+        public ICollection<Parts> Parts { get; set; }
+        [ForeignKey("ServiceFK")]
+        public Service? Service { get; set; } 
     }
 }

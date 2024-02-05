@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -118,14 +119,17 @@ namespace VolvoFinalProject.Api.Middlewares
             // Obtém o nível de detalhamento dinâmico configurado
             var logLevel = GetLogLevel();
 
-            // Verifica se o nível de detalhamento permite o log da exceção
-            if (logLevel <= LogEventLevel.Error)
+            // Obtém o nível do log da exceção
+            var exceptionLogLevel = GetExceptionLogLevel(ex);
+
+            // Verifica se o nível da exceção é igual ou superior ao nível configurado
+            if (exceptionLogLevel <= logLevel)
             {
                 // Adiciona informações do contexto ao log
                 Log.ForContext<ErrorMiddleware>()
-                   .ForContext("RequestHeaders", context.Request.Headers, destructureObjects: true)
-                   .ForContext("RequestHost", context.Request.Host)
-                   .Error(ex, "Error processing request");
+                .ForContext("RequestHeaders", context.Request.Headers, destructureObjects: true)
+                .ForContext("RequestHost", context.Request.Host)
+                .Error(ex, "Error processing request");
             }
         }
 
@@ -136,6 +140,23 @@ namespace VolvoFinalProject.Api.Middlewares
             var logLevel = logger.IsEnabled(LogLevel.Debug) ? LogEventLevel.Debug : defaultLogLevel;
 
             return logLevel;
+        }
+
+        private LogEventLevel GetExceptionLogLevel(Exception ex)
+        {
+            // Define os níveis de log para diferentes tipos de exceção
+            if (ex is DbUpdateException || ex is FileNotFoundException || ex is UnauthorizedAccessException || ex is ErrorViewModel)
+            {
+                return LogEventLevel.Error;
+            }
+            else if (ex is WarningException) 
+            {
+                return LogEventLevel.Warning;
+            }
+            else
+            {
+                return LogEventLevel.Information;
+            }
         }
     }
 }

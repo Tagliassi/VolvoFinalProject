@@ -16,7 +16,6 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int BillID { get; set; }
         public int CustomerFK { get; set; }
         public int ServiceFK { get; set; }
-        [Required(ErrorMessage = "O valor total é obrigatório.")]
         public double Amount { get; set; }
     }
 }

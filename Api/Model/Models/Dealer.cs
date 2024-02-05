@@ -12,17 +12,15 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Dealer
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DealerID { get; set; }
         public int ContactFK { get; set; }
         public int ServiceFK { get; set; }
         public int EmployeeFK { get; set; }
         public int CustomerFK { get; set; }   
-        [MaxLength(18)]
-        [Required]
+        [MaxLength(18, ErrorMessage = "O valor máximo para o CNPJ é de 18 caracteres.")]
         public string CNPJ { get; set; } = string.Empty;
-        [MaxLength(100)]
-        [Required]
+        [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
+        [Required(ErrorMessage = "O nome é obrigatório.")]
         public string Name { get; set; } = string.Empty;
         [ForeignKey("ContactFK")] 
         public Contacts? Contacts { get; set; }

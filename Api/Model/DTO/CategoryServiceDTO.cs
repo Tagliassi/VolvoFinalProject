@@ -22,8 +22,6 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int CategoryServiceID { get; set; }
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }
-        [MaxLength(100, ErrorMessage = "O valor máximo para a descrição é 100 caracteres.")]
-        [Required (ErrorMessage = "A descrição é obrigatória.")]
         public string Description { get; set; } = string.Empty;
         public EnumCategoryService Category { get; set; } 
         public ICollection<Parts> Parts { get; set; }  

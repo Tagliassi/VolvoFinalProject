@@ -19,8 +19,7 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int CustomerFK { get; set; }
         public int VehicleFK { get; set; }
         public int CategoryServiceFK { get; set; } 
-        public double Value { get; set; }       
-        [Required(ErrorMessage = "A data do serviço é obrigatória.")]
+        public double Value { get; set; } 
         public DateTime? Date { get; set; }
         public EnumSituation Situation { get; set; } 
     }

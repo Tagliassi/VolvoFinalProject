@@ -14,7 +14,6 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Employee
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeID { get; set; }
         public int DealerFK { get; set; }
         public int ServiceFK { get; set; }
@@ -23,13 +22,11 @@ namespace VolvoFinalProject.Api.Model.Models
         [Required]
         public double BaseSalary { get; set; }
         public double Commission { get; set; }
-        [MaxLength(11)]
-        [Required]
+        [MaxLength(11, ErrorMessage = "O valor máximo para o CPF é de 11 caracteres.")]
         public string CPF { get; set; } = string.Empty;
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
         public string Name { get; set; } = string.Empty;
-        [MaxLength(50)]
-        [Required]
+        [Required(ErrorMessage = "O tipo do funcionário é obrigatório.")]
         public EnumEmployees Employees { get; set; } 
         [ForeignKey("DealerFK")] 
         public Dealer? Dealer { get; set; }

@@ -18,8 +18,6 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int? ServiceFK { get; set; }
         public int? EmployeeFK { get; set; }
         public int? CustomerFK { get; set; }   
-        [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
-        [Required(ErrorMessage = "O nome é obrigatório.")]
         public string Name { get; set; } = string.Empty;
     }
 }

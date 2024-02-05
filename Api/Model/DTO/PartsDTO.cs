@@ -11,17 +11,11 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class PartsDTO
     {
-        public int PartID { get; set; }
-        [Required(ErrorMessage = "A quantidade de peças é obrigatória.")]
-        public int Quantity { get; set; }
-        [Required(ErrorMessage = "O valor do peça é obrigatório.")]
-        public float Value { get; set; }
-        [Required(ErrorMessage = "A disponibilidade da peça é obrigatória.")]
-        public bool Availabity { get; set; }  
-        [MaxLength(100, ErrorMessage = " valor máximo para o nome da peça é de 100 caracteres.")]
+        public int PartID { get; set; }        
+        public int Quantity { get; set; }        
+        public float Value { get; set; }        
+        public bool Availabity { get; set; }          
         public string Name { get; set; } = string.Empty;
-        [MaxLength(50, ErrorMessage = " valor máximo para a localização da peça é de 50 caracteres.")]
-        [Required(ErrorMessage = "A localização da peça é obrigatória.")]
         public string Location { get; set; } = string.Empty;
     }
 }

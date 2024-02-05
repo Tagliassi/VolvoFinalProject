@@ -14,14 +14,14 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Service
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ServiceID { get; set; }        
         public int PartFK { get; set; }       
         public int EmployeeFK { get; set; }        
         public int CustomerFK { get; set; } 
         public int VehicleFK { get; set; }
         public int CategoryServiceFK { get; set; }         
-        public double Value { get; set; }       
+        public double Value { get; set; }  
+        [Required(ErrorMessage = "A data do serviço é obrigatória.")]     
         public DateTime? Date { get; set; }
         public EnumSituation Situation { get; set; } 
         [ForeignKey("PartsFK")]

@@ -16,9 +16,7 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int DealerFK { get; set; }
         public int ContactFK { get; set; }
         public float Salary { get; set; }
-        [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
         public string Name { get; set; } = string.Empty;
-        [Required(ErrorMessage = "O tipo do funcionário é obrigatório.")]
         public EnumEmployees Employees { get; set; } 
     }
 }

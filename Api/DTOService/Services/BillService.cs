@@ -15,21 +15,19 @@ namespace VolvoFinalProject.Api.DTOService.Services
     public class BillService : IBillService
     {
         private readonly IBillRepository _repository;
-        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public BillService(IBillRepository repository, IMapper mapper, ICustomerRepository customerRepository)
+        public BillService(IBillRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _customerRepository = customerRepository;
             _mapper = mapper;
         }
 
         // Calculate total bill for a customer based on services
-        public async Task<double> CalculateBill(Customer customer)
+        public async Task<double> CalculateBill(Service service)
         {
             var bill = 0.0;
-            var services = await _customerRepository.GetServicesByCustomer(customer.CustomerID);
+            var services = await _repository.GetServicesOfBill(service.ServiceID);
             foreach (var custService in services)
             {
                 var value = custService.Value;

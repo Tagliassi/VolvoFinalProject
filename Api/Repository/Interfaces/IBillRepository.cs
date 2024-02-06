@@ -6,5 +6,6 @@ namespace VolvoFinalProject.Api.Repository.Interfaces
     public interface IBillRepository : IBaseRepository<Bill>
     {
         Task<IEnumerable<Service>> GetServicesOfBill(int serviceFKid);
+        Task<Bill?> GetBillByCustomerID(int customerID);
     }
 }

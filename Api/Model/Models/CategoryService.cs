@@ -27,6 +27,7 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(100, ErrorMessage = "O valor máximo para a descrição é 100 caracteres.")]
         public EnumCategoryService Category { get; set; }
 
+        [JsonIgnore]
         public virtual Service? Service { get; set; }
     }
 }

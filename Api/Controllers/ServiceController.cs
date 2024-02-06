@@ -27,25 +27,10 @@ namespace VolvoFinalProject.Api.Controllers
         private readonly IUnitOfWork _unitOfWork;
 
         public ServiceController(IMapper mapper, ServiceService serviceService, IUnitOfWork unitOfWork)
-        
         {
             _mapper = mapper;
             _serviceService = serviceService;
             _unitOfWork = unitOfWork;
-        }
-
-        [HttpPatch("{id}/update-status")]
-        public async Task<IActionResult> UpdateServiceStatus(int id, [FromBody] EnumSituation newStatus)
-        {
-            try
-            {
-                var updatedService = await _serviceService.UpdateServiceStatus(id, newStatus);
-                return Ok(updatedService);
-            }
-            catch (ErrorViewModel error)
-            {
-                return BadRequest(error);
-            }
         }
 
         // GET: api/Service

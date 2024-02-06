@@ -18,14 +18,34 @@ namespace VolvoFinalProject.Api.Controllers
     {       
         private readonly IMapper _mapper;
         private readonly IEmployeeService _employeeService;
+        private readonly IDealerRepository _dealerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         // Constructor to initialize dependencies
-        public EmployeeController(IMapper mapper, IEmployeeService employeeService, IUnitOfWork unitOfWork)
+        public EmployeeController(IMapper mapper, IEmployeeService employeeService, IDealerRepository dealerRepository, IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _employeeService = employeeService;
+            _dealerRepository = dealerRepository;
+            _employeeRepository = employeeRepository;
             _unitOfWork = unitOfWork;
+        }
+
+        // GET: api/dealer/5/Dealer
+        [HttpGet("{id}/Dealer")]
+        public async Task<ActionResult> GetEmployeesByDealer(int id)
+        {
+            var employees = await _dealerRepository.GetEmployeesByDealer(id);
+            return Ok(employees);
+        }
+
+        // GET: api/dealer/5/Dealer
+        [HttpGet("{id}/EmployeeServices")]
+        public async Task<ActionResult> GetServicesByEmployee(int id)
+        {
+            var services = await _employeeRepository.GetServicesByEmployee(id);
+            return Ok(services);
         }
 
         // GET: api/Employee

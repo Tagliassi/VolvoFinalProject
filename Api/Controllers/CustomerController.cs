@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VolvoFinalProject.Api.DTOService.Interfaces;
 using VolvoFinalProject.Api.Model.DTO;
+using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject.Api.Repository.Interfaces;
 
 namespace VolvoFinalProject.Api.Controllers
@@ -14,13 +15,17 @@ namespace VolvoFinalProject.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICustomerService _customerService;
+        private readonly IBillService _billService;
+        private readonly IBillRepository _billRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerController(IMapper mapper, ICustomerService customerService, IUnitOfWork unitOfWork)
+        public CustomerController(IMapper mapper, ICustomerService customerService,IBillRepository billRepository, IBillService billService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _customerService = customerService;
             _unitOfWork = unitOfWork;
+            _billRepository = billRepository;
+            _billService = billService;
         }
 
         [HttpGet]
@@ -39,6 +44,44 @@ namespace VolvoFinalProject.Api.Controllers
             var customerDTO = _mapper.Map<CustomerDTO>(customer);
             _unitOfWork.Commit();
             return Ok(customerDTO);
+        }
+
+        // GET: api/Bill/5/total
+        [HttpGet("{ID}/total")]
+        public async Task<IActionResult> GetBillTotal(int ID)
+        {
+            try
+            {
+                // Busca a fatura pelo ID do cliente
+                var bill = await _billRepository.GetBillByCustomerID(ID);
+                
+                // Se a fatura não for encontrada, retorna NotFound
+                if (bill == null)
+                    return NotFound();
+
+                // Calcula o valor total da fatura com base nos serviços associados
+                double totalAmount = await _billService.CalculateBill(bill);
+
+                // Atualiza o valor da fatura
+                bill.Amount = totalAmount;
+
+                // Constrói um BillDTO com o valor do Amount atualizado
+                var billDTO = new BillDTO
+                {
+                    BillID = bill.BillID,
+                    CustomerFK = bill.CustomerFK,
+                    ServiceFK = bill.ServiceFK,
+                    Amount = bill.Amount
+                };
+
+                // Retorna o BillDTO com o valor atualizado
+                return Ok(billDTO);
+            }
+            catch (Exception ex)
+            {
+                // Em caso de erro, retorna um StatusCode 500 com a mensagem de erro
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]

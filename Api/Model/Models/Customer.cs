@@ -30,7 +30,9 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(18, ErrorMessage = "O valor máximo para o CPF é de 18 caracteres.")]
         public string CPF { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public virtual Contacts? Contacts { get; set; }
+        [JsonIgnore]
         public virtual Dealer? Dealer { get; set; }
     }
 }

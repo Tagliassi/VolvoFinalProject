@@ -29,8 +29,10 @@ namespace VolvoFinalProject.Api.Model.Models
         [Required(ErrorMessage = "A data do serviço é obrigatória.")]
         public DateTime Date { get; set; }
 
+        [JsonIgnore]
         public EnumSituation Situation { get; set; }
 
+        [JsonIgnore]
         public virtual Dealer? Dealer { get; set; }
     }
 }

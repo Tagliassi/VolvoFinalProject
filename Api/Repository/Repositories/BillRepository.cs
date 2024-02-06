@@ -18,6 +18,21 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             _context = context;
         }
 
+        public async Task<Bill?> GetBillByCustomerID(int customerID)
+        {
+            return await _context.Bills.FirstOrDefaultAsync(b => b.CustomerFK == customerID);
+        }
+
+        //Retrieve all Services entity to the Bill        
+        public async Task<IEnumerable<Service>> GetServicesOfBill(int serviceFKid)
+        {
+            var services = await _context.Services
+                .Where(s => s.ServiceID == serviceFKid)
+                .ToListAsync();
+
+            return services;
+        }
+        
         // Add a new Bill entity to the database
         public async Task<Bill> AddEntity(Bill entity)
         {
@@ -77,13 +92,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
         }
         
-        public async Task<IEnumerable<Service>> GetServicesOfBill(int serviceFKid)
-        {
-            var services = await _context.Services
-                .Where(s => s.ServiceID == serviceFKid)
-                .ToListAsync();
 
-            return services;
-        }
     }
 }

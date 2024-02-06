@@ -25,6 +25,8 @@ namespace VolvoFinalProject.Api.Model.Models
         [Required(ErrorMessage = "O nome é obrigatório.")]
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
         public string Name { get; set; } = string.Empty;
+
+        [JsonIgnore]
         public virtual Contacts? Contacts { get; set; }
     }
 }

@@ -21,6 +21,20 @@ namespace VolvoFinalProject.Api.DTOService.Services
             _mapper = mapper;
         }
 
+        public async Task<double> CalculateSalary(EmployeeDTO employee)
+        {
+            var salary = employee.BaseSalary;
+            var services = await _repository.GetServicesByEmployee(employee.EmployeeID);
+
+            foreach (var empService in services)
+            {
+                var value = empService.Value * employee.Commission;
+                salary += value;
+            }
+
+            return salary;
+        }
+
         public async Task<EmployeeDTO> AddEntity(EmployeeDTO entity)
         {
             var employee = _mapper.Map<Employee>(entity);
@@ -100,20 +114,6 @@ namespace VolvoFinalProject.Api.DTOService.Services
             }
 
             return _mapper.Map<EmployeeDTO>(updatedEmployee);
-        }
-
-        public async Task<double> CalculateSalary(EmployeeDTO employee)
-        {
-            var salary = employee.BaseSalary;
-            var services = await _repository.GetServicesByEmployee(employee.EmployeeID);
-
-            foreach (var empService in services)
-            {
-                var value = empService.Value * employee.Commission;
-                salary += value;
-            }
-
-            return salary;
         }
     }
 }

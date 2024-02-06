@@ -18,14 +18,16 @@ namespace VolvoFinalProject.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPartsService _partsService;
+        private readonly ICategoryServiceRepository _categoryServiceRepository;
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public PartsController(IMapper mapper, IPartsService partsService, IUnitOfWork unitOfWork)
+        public PartsController(IMapper mapper, IPartsService partsService,ICategoryServiceRepository categoryServiceRepository, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _partsService = partsService;
             _unitOfWork = unitOfWork;
+            _categoryServiceRepository = categoryServiceRepository;
         }
         
         // GET: api/Parts
@@ -48,6 +50,14 @@ namespace VolvoFinalProject.Api.Controllers
             var partsDTO = _mapper.Map<PartsDTO>(parts);
             _unitOfWork.Commit();
             return Ok(partsDTO);
+        }
+
+        // GET: api/Parts/5/service
+        [HttpGet("{id}/CategoryService")]
+        public async Task<ActionResult> GetPartsByCategoryService(int id)
+        {
+            var parts = await _categoryServiceRepository.GetPartsByCategoryService(id);
+            return Ok(parts);
         }
 
         // POST: api/Parts

@@ -12,7 +12,7 @@ using VolvoFinalProject.Api.Model.Models;
 namespace VolvoFinalProject.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20240206154435_CreateDatabase")]
+    [Migration("20240206212611_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />

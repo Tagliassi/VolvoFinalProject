@@ -40,7 +40,10 @@ namespace VolvoFinalProject.Api.Model.Models
         [Required(ErrorMessage = "O tipo do funcionário é obrigatório.")]
         public EnumEmployees Employees { get; set; }
 
+        [JsonIgnore]
         public virtual Dealer? Dealer { get; set; }
+        
+        [JsonIgnore]
         public virtual Contacts? Contacts { get; set; }
     }
 }

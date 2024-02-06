@@ -24,16 +24,24 @@ namespace VolvoFinalProject.Api.DTOService.Services
         }
 
         // Calculate total bill for a customer based on services
-        public async Task<double> CalculateBill(Service service)
+        public async Task<double> CalculateBill(Bill bill)
         {
-            var bill = 0.0;
-            var services = await _repository.GetServicesOfBill(service.ServiceID);
-            foreach (var custService in services)
+            double totalBill = 0.0;
+
+            // Ensure bill is not null
+            if (bill != null)
             {
-                var value = custService.Value;
-                bill += value;
+                // Get services associated with the bill
+                var services = await _repository.GetServicesOfBill(bill.ServiceFK);
+
+                // Iterate through each service to calculate the total bill
+                foreach (var service in services)
+                {
+                    totalBill += service.Value;
+                }
             }
-            return bill;
+
+            return totalBill;
         }
 
         // Add a new Bill entity

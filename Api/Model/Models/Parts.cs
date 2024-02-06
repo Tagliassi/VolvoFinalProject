@@ -35,6 +35,7 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(50, ErrorMessage = "O valor máximo para a localização da peça é de 50 caracteres.")]
         public string Location { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public virtual CategoryService? CategoryService { get; set; }
     }
 }

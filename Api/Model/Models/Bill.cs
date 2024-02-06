@@ -24,7 +24,9 @@ namespace VolvoFinalProject.Api.Model.Models
         [Required(ErrorMessage = "O valor total é obrigatório.")]
         public double Amount { get; set; }
 
+        [JsonIgnore]
         public virtual Customer? Customer { get; set; }
+        [JsonIgnore]
         public virtual Service? Service { get; set; }
     }
 }

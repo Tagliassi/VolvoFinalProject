@@ -14,13 +14,11 @@ namespace VolvoFinalProject.Api.Model.DTO
     public class ServiceDTO
     {
         public int ServiceID { get; set; }
-        public int PartFK { get; set; }
+        public int DealerFK { get; set; }
         public int EmployeeFK { get; set; }
-        public int CustomerFK { get; set; }
-        public int VehicleFK { get; set; }
-        public int CategoryServiceFK { get; set; } 
-        public double Value { get; set; } 
-        public DateTime? Date { get; set; }
-        public EnumSituation Situation { get; set; } 
+        public double Value { get; set; }
+        public DateTime Date { get; set; }
+        public EnumSituation Situation { get; set; }
+        public virtual Dealer? Dealer { get; set; }
     }
 }

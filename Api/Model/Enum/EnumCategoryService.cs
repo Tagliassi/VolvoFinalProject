@@ -27,6 +27,5 @@ namespace VolvoFinalProject.Api.Model.Models.Enum
         WelcomeCustomer = 10,
         [Description("Validar a disponibilidade da peça")]
         PartAvailability = 11       
-
     }
 }

@@ -12,14 +12,19 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Bill
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BillID { get; set; }
+
+        [ForeignKey("Customer")]
         public int CustomerFK { get; set; }
+
+        [ForeignKey("Service")]
         public int ServiceFK { get; set; }
+
         [Required(ErrorMessage = "O valor total é obrigatório.")]
-        public double Amount { get; set; } 
-        [ForeignKey("CustomerFK")]
-        public Customer? Customer { get; set; }
-        [ForeignKey("ServiceFK")]
-        public Service? Service { get; set; }
+        public double Amount { get; set; }
+
+        public virtual Customer? Customer { get; set; }
+        public virtual Service? Service { get; set; }
     }
 }

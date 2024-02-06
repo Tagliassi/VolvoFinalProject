@@ -22,7 +22,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public async Task<Bill> AddEntity(Bill entity)
         {
             await _context.Set<Bill>().AddAsync(entity);
-            // await _context.SaveChangesAsync();  
+            await _context.SaveChangesAsync();  
             return entity;
         }
 
@@ -33,12 +33,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Bill>().Remove(entity);
-                // await _context.SaveChangesAsync();  
-            }
-            else
-            {
-                // Throw an exception if the Bill entity with the specified ID is not found
-                throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
+                await _context.SaveChangesAsync();
             }
         }
 
@@ -54,8 +49,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Bill>()
-                .Include("Customer")
-                .Include("Service")
+                .Include("Customers")
+                .Include("Services")
                 .SingleAsync(w => w.BillID == id);
 
             if (entity != null)
@@ -74,12 +69,21 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (oldEntity != null)
             {
                 _context.Entry<Bill>(oldEntity).CurrentValues.SetValues(entity);
-                // await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync(); 
                 return entity;
             }
 
             // Throw an exception if the Bill entity with the specified ID is not found
             throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
+        }
+        
+        public async Task<IEnumerable<Service>> GetServicesOfBill(int serviceFKid)
+        {
+            var services = await _context.Services
+                .Where(s => s.ServiceID == serviceFKid)
+                .ToListAsync();
+
+            return services;
         }
     }
 }

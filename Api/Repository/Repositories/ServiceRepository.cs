@@ -13,35 +13,16 @@ namespace VolvoFinalProject.Api.Repository.Repositories
     {
         private ProjectContext _context;
 
-        private ICustomerRepository _repository;
-
-        public ServiceRepository(ProjectContext context, ICustomerRepository repository )
+        public ServiceRepository(ProjectContext context)
         {
             _context = context;
-            _repository = repository;
 
-        }
-
-        public async Task<List<Service>> GetServiceDetails(Customer customer)
-        {
-            var services = await _repository.GetServicesByCustomer(customer.CustomerID);
-            var serviceDetails = new List<Service>();
-
-            foreach (var service in services)
-            {
-                serviceDetails.Add(service);
-            }
-                if (serviceDetails.Count == 0)
-            {
-                throw new ErrorViewModel("Services Not Found", "No services found for the customer in the database.");
-            }
-            return serviceDetails;
         }
 
         public async Task<Service> AddEntity(Service entity)
         {
             await _context.Set<Service>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -51,10 +32,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Service>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Service Not Found", $"Service with Id {id} not found.");
         }
 
         public async Task<ICollection<Service>> GetAllEntity()
@@ -67,11 +46,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Service>()
-                .Include("Parts")
-                .Include("Employee")
-                .Include("Customer")
-                .Include("Vehicle")
-                .Include("CategoryService")
+                .Include("Employees")
+                .Include("Dealers")
                 .SingleAsync(w => w.ServiceID == id);
 
             if (entity != null)

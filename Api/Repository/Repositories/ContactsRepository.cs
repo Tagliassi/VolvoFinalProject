@@ -20,7 +20,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public async Task<Contacts> AddEntity(Contacts entity)
         {
             await _context.Set<Contacts>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -30,10 +30,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Contacts>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Contact Not Found", $"Contact with Id {id} not found.");
         }
 
         public async Task<ICollection<Contacts>> GetAllEntity()

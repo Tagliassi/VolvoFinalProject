@@ -13,27 +13,24 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Customer
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CustomerID { get; set; }
-        public int ServiceFK { get; set; }
-        public int BillFK { get; set; }
+
+        [ForeignKey("Contact")]
         public int ContactFK { get; set; }
-        public int VehicleFK { get; set; }
+
+        [ForeignKey("Dealer")]
+        public int DealerFK { get; set; }
+
+        [Required(ErrorMessage = "O nome é obrigatório.")]
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
-        [Required (ErrorMessage = "O nome é obrigatório.")]
         public string Name { get; set; } = string.Empty;
-        [MaxLength(18, ErrorMessage = "O valor máximo para o CPF é de 18 caracteres.")]
+
         [Required(ErrorMessage = "O CPF é obrigatório.")]
+        [MaxLength(18, ErrorMessage = "O valor máximo para o CPF é de 18 caracteres.")]
         public string CPF { get; set; } = string.Empty;
-        [ForeignKey("ServiceFK")]
-        public Service? Service { get; set; }
-        [ForeignKey("BillFK")]
-        public Bill? Bill { get; set; }
-        [ForeignKey("ContactFK")]
-        public Contacts? Contacts { get; set; }
-        [ForeignKey("VehicleFK")]
-        public Vehicle? Vehicle { get; set; }
-        
-        public ICollection<Bill>? Bills { get; set; }
-        public ICollection<Vehicle>? Vehicles { get; set; }
+
+        public virtual Contacts? Contacts { get; set; }
+        public virtual Dealer? Dealer { get; set; }
     }
 }

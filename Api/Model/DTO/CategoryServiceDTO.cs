@@ -14,16 +14,10 @@ namespace VolvoFinalProject.Api.Model.DTO
 {
     public class CategoryServiceDTO 
     {
-        public CategoryServiceDTO()
-        {
-            Parts = new HashSet<Parts>();
-        }
-
-        public int CategoryServiceID { get; set; }
+        public int CategoryServiceID { get; set; } 
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public EnumCategoryService Category { get; set; } 
-        public ICollection<Parts> Parts { get; set; }  
+        public EnumCategoryService Category { get; set; }
+        public virtual Service? Service { get; set; }
     }
 }

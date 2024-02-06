@@ -13,13 +13,14 @@ namespace VolvoFinalProject.Api.Model.DTO
     public class ContactsDTO
     {
         public int ContactsID { get; set; }
-        public int AddressNumber { get; set; }  
+        public int AddressNumber { get; set; }
+        public string Email { get; set; } = string.Empty;
         public string TelephoneNumber { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Neighborhood { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public string CEP { get; set; } = string.Empty;
-        public EnumTelephoneType Telephone { get; set; }    
+        public EnumTelephoneType TelephoneType { get; set; }   
     }
 }

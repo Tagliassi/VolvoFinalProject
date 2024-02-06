@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using VolvoFinalProject;
+using VolvoFinalProject.Api.Model.Models;
 using VolvoFinalProject.Api.Repository.Interfaces;
 
 namespace VolvoFinalProject.Api.Model.DTO
@@ -14,10 +15,9 @@ namespace VolvoFinalProject.Api.Model.DTO
     public class DealerDTO 
     {
         public int DealerID { get; set; }
-        public int? ContactFK { get; set; }
-        public int? ServiceFK { get; set; }
-        public int? EmployeeFK { get; set; }
-        public int? CustomerFK { get; set; }   
+        public int ContactFK { get; set; }
+        public string CNPJ { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public Contacts? Contacts { get; set; }
     }
 }

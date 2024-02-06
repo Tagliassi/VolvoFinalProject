@@ -16,24 +16,10 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Service>> GetServicesByCustomer(int customerId)
-        {
-            var services = await _context.Services
-                .Where(s => s.CustomerFK == customerId)
-                .ToListAsync();
-
-            if (services.Any())
-            {
-                return services;
-            }
-
-            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {customerId} not found or has no services.");
-        }
-
         public async Task<Customer> AddEntity(Customer entity)
         {
             await _context.Set<Customer>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -43,10 +29,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Customer>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Customer Not Found", $"Customer with Id {id} not found.");
         }
 
         public async Task<ICollection<Customer>> GetAllEntity()
@@ -58,10 +42,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Customer>()  
-                .Include("Service")
-                .Include("Bill")
-                .Include("Contact")
-                .Include("Vehicle")     
+                .Include("Dealers")
+                .Include("Contact")  
                 .SingleAsync(w => w.CustomerID == id);
 
             if (entity != null)

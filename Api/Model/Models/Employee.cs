@@ -14,27 +14,31 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Employee
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeID { get; set; }
+
+        [ForeignKey("Dealer")]
         public int DealerFK { get; set; }
-        public int ServiceFK { get; set; }
+
+        [ForeignKey("Contact")]
         public int ContactFK { get; set; }
-        public double Salary { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "O salário base é obrigatório.")]
         public double BaseSalary { get; set; }
+
         public double Commission { get; set; }
+
         [MaxLength(11, ErrorMessage = "O valor máximo para o CPF é de 11 caracteres.")]
         public string CPF { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "O nome é obrigatório.")]
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome é de 100 caracteres.")]
         public string Name { get; set; } = string.Empty;
-        [Required(ErrorMessage = "O tipo do funcionário é obrigatório.")]
-        public EnumEmployees Employees { get; set; } 
-        [ForeignKey("DealerFK")] 
-        public Dealer? Dealer { get; set; }
-        [ForeignKey("ServiceFK")]  
-        public Service? Service { get; set; }
-        [ForeignKey("ContactFK")] 
-        public Contacts? Contacts { get; set; }
 
-        public ICollection<Dealer>? Dealers { get; set; }
+        [Required(ErrorMessage = "O tipo do funcionário é obrigatório.")]
+        public EnumEmployees Employees { get; set; }
+
+        public virtual Dealer? Dealer { get; set; }
+        public virtual Contacts? Contacts { get; set; }
     }
 }

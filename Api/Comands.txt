@@ -26,3 +26,7 @@ dotnet ef migrations add CreateDatabase
 dotnet ef database update
 
 dotnet run
+
+USE VolvoFinalProject;
+GO
+SET IDENTITY_INSERT ON;

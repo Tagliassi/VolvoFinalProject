@@ -14,28 +14,23 @@ namespace VolvoFinalProject.Api.Model.Models
     public class Service
     {
         [Key]
-        public int ServiceID { get; set; }        
-        public int PartFK { get; set; }       
-        public int EmployeeFK { get; set; }        
-        public int CustomerFK { get; set; } 
-        public int VehicleFK { get; set; }
-        public int CategoryServiceFK { get; set; }         
-        public double Value { get; set; }  
-        [Required(ErrorMessage = "A data do serviço é obrigatória.")]     
-        public DateTime? Date { get; set; }
-        public EnumSituation Situation { get; set; } 
-        [ForeignKey("PartsFK")]
-        public Parts? Parts { get; set; }
-        [ForeignKey("EmployeeFK")]
-        public Employee? Employee { get; set; }
-        [ForeignKey("CustomerFK")]
-        public Customer? Customer { get; set; }
-        [ForeignKey("VehicleFK")]
-        public Vehicle? Vehicle { get; set; }
-        [ForeignKey("CategoryServiceFK")]
-        public CategoryService? CategoryService { get; set; } 
-        public ICollection<CategoryService>? CategoryServices { get; set; }
-        public ICollection<Customer>? Customers { get; set; }
-        public ICollection<Employee>? Employees { get; set; } 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ServiceID { get; set; }
+
+        [ForeignKey("Dealer")]
+        public int DealerFK { get; set; }
+
+        [ForeignKey("Employees")]
+        public int EmployeeFK { get; set; }
+
+        [Required(ErrorMessage = "O valor do serviço é obrigatório.")]
+        public double Value { get; set; }
+
+        [Required(ErrorMessage = "A data do serviço é obrigatória.")]
+        public DateTime Date { get; set; }
+
+        public EnumSituation Situation { get; set; }
+
+        public virtual Dealer? Dealer { get; set; }
     }
 }

@@ -17,15 +17,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             _context = context;
         }
 
-        public async Task<ICollection<Parts>> GetPartsByCategoryService(int CategoryServiceId)
-        {
-            var categoryService = await _context.CategoryServices
-                .Include(cs => cs.Parts)
-                .FirstOrDefaultAsync(cs => cs.CategoryServiceID == CategoryServiceId);
-
-            return categoryService?.Parts.ToList() ?? new List<Parts>();
-        }
-
         public async Task<CategoryService> AddEntity(CategoryService entity)
         {
             await _context.Set<CategoryService>().AddAsync(entity);
@@ -41,10 +32,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
                 _context.Set<CategoryService>().Remove(entity);
                 await _context.SaveChangesAsync();
             }
-            else
-            {
-                throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
-            }
         }
 
         public async Task<ICollection<CategoryService>> GetAllEntity()
@@ -56,7 +43,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             return await _context
                 .Set<CategoryService>()
-                .Include("Service")
+                .Include("Services")
                 .SingleAsync(w => w.CategoryServiceID == id);
         }
 
@@ -71,6 +58,14 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             }
 
             throw new ErrorViewModel("Service category Not Found", $"Service category with Id {id} not found.");
+        }
+        public async Task<ICollection<Parts>> GetPartsByCategoryService(int CategoryServiceId)
+        {
+            var parts = await _context.Part
+                .Where(p => p.CategoryServiceFK == CategoryServiceId)
+                .ToListAsync();
+
+            return parts;
         }
     }
 }

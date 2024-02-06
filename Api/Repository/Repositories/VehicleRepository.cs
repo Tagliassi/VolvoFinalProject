@@ -32,7 +32,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public async Task<Vehicle> AddEntity(Vehicle entity)
         { 
             await _context.Set<Vehicle>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -42,10 +42,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Vehicle>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Vehicle Not Found", $"Vehicle with Id {id} not found.");
         }
 
         public async Task<ICollection<Vehicle>> GetAllEntity()
@@ -63,7 +61,6 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             var entity = await _context
                 .Set<Vehicle>()
                 .Include("Customer")
-                .Include("Service")
                 .SingleAsync(w => w.VehicleID == id);
 
             if (entity != null)

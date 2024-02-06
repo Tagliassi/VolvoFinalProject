@@ -20,7 +20,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         public async Task<Parts> AddEntity(Parts entity)
         {
             await _context.Set<Parts>().AddAsync(entity);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -30,10 +30,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             if (entity != null)
             {
                 _context.Set<Parts>().Remove(entity);
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            throw new ErrorViewModel("Part Not Found", $"Part with Id {id} not found.");
         }
 
         public async Task<ICollection<Parts>> GetAllEntity()
@@ -45,6 +43,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Parts>()
+                .Include("CategoryServices")
                 .SingleAsync(w => w.PartID == id);
 
             if (entity != null)

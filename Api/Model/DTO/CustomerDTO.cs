@@ -17,7 +17,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int DealerFK { get; set; }
         public string Name { get; set; } = string.Empty;
         public string CPF { get; set; } = string.Empty;
-        public virtual Contacts? Contacts { get; set; }
-        public virtual Dealer? Dealer { get; set; }
     }
 }

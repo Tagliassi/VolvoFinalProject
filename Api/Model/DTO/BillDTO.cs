@@ -18,7 +18,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int CustomerFK { get; set; }
         public int ServiceFK { get; set; }
         public double Amount { get; set; }
-        public virtual Customer? Customer { get; set; }
-        public virtual Service? Service { get; set; }
     }
 }

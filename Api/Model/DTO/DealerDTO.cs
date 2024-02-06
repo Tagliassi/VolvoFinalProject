@@ -18,6 +18,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int ContactFK { get; set; }
         public string CNPJ { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public Contacts? Contacts { get; set; }
     }
 }

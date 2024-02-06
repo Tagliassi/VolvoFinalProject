@@ -49,8 +49,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Bill>()
-                .Include("Customers")
-                .Include("Services")
+                .Include("Customer")
+                .Include("Service")
                 .SingleAsync(w => w.BillID == id);
 
             if (entity != null)

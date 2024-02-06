@@ -21,6 +21,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public string Model { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
         public string SystemVersion { get; set; } = string.Empty;
-        public virtual Customer? Customer { get; set; }
     }
 }

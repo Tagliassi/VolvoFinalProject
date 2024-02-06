@@ -42,8 +42,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Customer>()  
-                .Include("Dealers")
-                .Include("Contact")  
+                .Include("Dealer")
+                .Include("Contacts")  
                 .SingleAsync(w => w.CustomerID == id);
 
             if (entity != null)

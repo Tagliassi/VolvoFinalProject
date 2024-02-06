@@ -19,6 +19,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public string Availabity { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        public virtual CategoryService? CategoryService { get; set; }
     }
 }

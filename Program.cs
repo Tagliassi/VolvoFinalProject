@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +23,11 @@ ConfigureServices(builder);
 var app = builder.Build();
 var env = app.Environment;
 
-// Use middleware
-app.UseMiddleware<ErrorMiddleware>();
-
 // Additional configuration based on environment
 ConfigureEnvironment(app, env);
+
+// Use middleware
+app.UseMiddleware<ErrorMiddleware>();
 
 // Run the application
 app.Run();
@@ -111,11 +112,15 @@ void ConfigureEnvironment(WebApplication app, IHostEnvironment env)
 {
     if (env.IsDevelopment())
     {
+        app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyAPI v1"));
     }
 
     app.UseHttpsRedirection();
+
+    app.UseRouting();
     app.UseAuthorization();
+
     app.MapControllers();
 }

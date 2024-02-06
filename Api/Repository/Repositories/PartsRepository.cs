@@ -43,7 +43,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Parts>()
-                .Include("CategoryServices")
+                .Include("CategoryService")
                 .SingleAsync(w => w.PartID == id);
 
             if (entity != null)

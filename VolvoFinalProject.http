@@ -1,6 +1,3 @@
 @VolvoFinalProject_HostAddress = http://localhost:5121
 
-GET {{VolvoFinalProject_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###

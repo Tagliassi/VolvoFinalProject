@@ -43,7 +43,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             return await _context
                 .Set<CategoryService>()
-                .Include("Services")
+                .Include("Service")
                 .SingleAsync(w => w.CategoryServiceID == id);
         }
 

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -76,6 +77,12 @@ namespace VolvoFinalProject.Api.Middlewares
                 // Tratamento para exceções do tipo ErrorViewModel lançadas pelos repositórios
                 errorViewModel = errorViewModelException;
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+            else if (ex is SqlException sqlException && sqlException.Number == 547)
+            {
+                // Tratamento para violação de restrição de chave estrangeira
+                errorViewModel = new ErrorViewModel(HttpStatusCode.Conflict.ToString(), "Foreign key constraint violation occurred during database operation.");
+                context.Response.StatusCode = (int)HttpStatusCode.Conflict;
             }
             else
             {

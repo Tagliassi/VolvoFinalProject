@@ -46,8 +46,8 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Service>()
-                .Include("Employees")
-                .Include("Dealers")
+                .Include("Employee")
+                .Include("Dealer")
                 .SingleAsync(w => w.ServiceID == id);
 
             if (entity != null)

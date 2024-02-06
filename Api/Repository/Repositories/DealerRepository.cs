@@ -51,7 +51,7 @@ namespace VolvoFinalProject.Api.Repository.Repositories
         {
             var entity = await _context
                 .Set<Dealer>()
-                .Include("Contact")
+                .Include("Contacts")
                 .SingleAsync(w => w.DealerID == id);
 
             if (entity != null)

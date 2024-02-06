@@ -19,6 +19,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public double Value { get; set; }
         public DateTime Date { get; set; }
         public EnumSituation Situation { get; set; }
-        public virtual Dealer? Dealer { get; set; }
     }
 }

@@ -18,6 +18,5 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int ServiceFK { get; set; }
         public int ExecutionTime { get; set; }
         public EnumCategoryService Category { get; set; }
-        public virtual Service? Service { get; set; }
     }
 }

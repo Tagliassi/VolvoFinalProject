@@ -50,6 +50,24 @@ namespace VolvoFinalProject.Api.Controllers
             return Ok(employeeDTO);
         }
 
+        // GET: api/Employee/5/salary
+        [HttpGet("{id}/salary")]
+        public async Task<IActionResult> GetEmployeeSalary(int id)
+        {
+            var employee = await _employeeService.GetOneEntity(id); 
+
+            if (employee == null)
+            {
+                return NotFound(); 
+            }
+
+            var salary = await _employeeService.CalculateSalary(employee);
+
+            employee.Salary = salary;
+
+            return Ok(employee);
+        }
+
         // POST: api/Employee
         // Add a new employee
         [HttpPost]

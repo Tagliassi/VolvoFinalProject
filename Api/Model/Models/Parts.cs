@@ -25,7 +25,7 @@ namespace VolvoFinalProject.Api.Model.Models
         public float Value { get; set; }
 
         [Required(ErrorMessage = "A disponibilidade da peça é obrigatória.")]
-        public string Availabity { get; set; } = string.Empty;
+        public string Availability { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O nome da peça é obrigatório.")]
         [MaxLength(100, ErrorMessage = "O valor máximo para o nome da peça é de 100 caracteres.")]

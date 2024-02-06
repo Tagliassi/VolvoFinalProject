@@ -37,37 +37,37 @@ namespace VolvoFinalProject.Api.Model.Models
                 .HasOne(d => d.Contacts)
                 .WithMany()
                 .HasForeignKey(d => d.ContactFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Dealer)
                 .WithMany()
                 .HasForeignKey(e => e.DealerFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Contacts)
                 .WithMany()
                 .HasForeignKey(e => e.ContactFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.Contacts)
                 .WithMany()
                 .HasForeignKey(c => c.ContactFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Vehicle>()
                 .HasOne(v => v.Customer)
                 .WithMany()
                 .HasForeignKey(v => v.CustomerFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Service>()
                 .HasOne(s => s.Dealer)
                 .WithMany()
                 .HasForeignKey(s => s.DealerFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CategoryService>()
                 .HasOne(cs => cs.Service)
@@ -85,13 +85,13 @@ namespace VolvoFinalProject.Api.Model.Models
                 .HasOne(b => b.Customer)
                 .WithMany()
                 .HasForeignKey(b => b.CustomerFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Bill>()
                 .HasOne(b => b.Service)
                 .WithMany()
                 .HasForeignKey(b => b.ServiceFK)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -23,6 +23,8 @@ namespace VolvoFinalProject.Api.Model.Models
         [ForeignKey("Contact")]
         public int ContactFK { get; set; }
 
+        public double Salary { get; set; }
+
         [Required(ErrorMessage = "O salário base é obrigatório.")]
         public double BaseSalary { get; set; }
 

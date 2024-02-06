@@ -16,6 +16,7 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int EmployeeID { get; set; }
         public int DealerFK { get; set; }
         public int ContactFK { get; set; }
+        public double Salary { get; set; }
         public double BaseSalary { get; set; }
         public double Commission { get; set; }
         public string CPF { get; set; } = string.Empty;

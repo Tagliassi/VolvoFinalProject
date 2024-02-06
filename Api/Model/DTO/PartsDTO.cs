@@ -16,7 +16,7 @@ namespace VolvoFinalProject.Api.Model.DTO
         public int CategoryServiceFK { get; set; }
         public int Quantity { get; set; } 
         public float Value { get; set; } 
-        public string Availabity { get; set; } = string.Empty;
+        public string Availability { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
     }

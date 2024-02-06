@@ -42,6 +42,7 @@ namespace VolvoFinalProject.Api.Model.Models
         [MaxLength(20, ErrorMessage = "O valor máximo para a versão do sistema é de 20 caracteres.")]
         public string SystemVersion { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public virtual Customer? Customer { get; set; }
     }
 }

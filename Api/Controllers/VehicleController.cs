@@ -18,14 +18,18 @@ namespace VolvoFinalProject.Api.Controllers
     {       
         private readonly IMapper _mapper;
         private readonly IVehicleService _vehicleService;
+
+        private readonly IVehicleRepository _vehicleRepository;
+
         private readonly IUnitOfWork _unitOfWork;
 
         // Constructor to initialize dependencies
-        public VehicleController(IMapper mapper, IVehicleService vehicleService, IUnitOfWork unitOfWork)
+        public VehicleController(IMapper mapper, IVehicleService vehicleService,IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _vehicleService = vehicleService;
             _unitOfWork = unitOfWork;
+            _vehicleRepository = vehicleRepository;
         }
 
         // GET: api/Vehicle
@@ -48,6 +52,17 @@ namespace VolvoFinalProject.Api.Controllers
             var vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
             _unitOfWork.Commit();
             return Ok(vehicleDTO);
+        }
+
+        // GET: api/Vehicle/kilometers?Kilometrage=50000&SystemVersion=VOLVO FH16 D13A
+        [HttpGet("kilometers")]
+        public async Task<ActionResult> GetVehicleByKmAndSystemVersion(
+            [FromQuery] int Kilometrage,
+            [FromQuery] string SystemVersion
+        )
+        {
+            var vehicle = await _vehicleRepository.GetVehicleByKmAndSystemVersion(Kilometrage, SystemVersion);
+            return Ok(vehicle);
         }
 
         // POST: api/Vehicle

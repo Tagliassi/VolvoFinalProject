@@ -102,14 +102,14 @@ namespace VolvoFinalProject.Api.DTOService.Services
             return _mapper.Map<EmployeeDTO>(updatedEmployee);
         }
 
-        public async Task<double> CalculateSalary(Employee employee, Service service)
+        public async Task<double> CalculateSalary(EmployeeDTO employee)
         {
             var salary = employee.BaseSalary;
             var services = await _repository.GetServicesByEmployee(employee.EmployeeID);
 
             foreach (var empService in services)
             {
-                var value = service.Value * employee.Commission;
+                var value = empService.Value * employee.Commission;
                 salary += value;
             }
 

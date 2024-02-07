@@ -5,18 +5,17 @@ Application development course carried out by PUCPR and Volvo Group: ASP.NET Cor
 
 # Project Theme
 
-• Livre: Os alunos podem escolher o tema do projeto de acordo
-com seus interesses, desde que o projeto cumpra com os
-requisitos técnicos especificados abaixo.
+[Volvo Project Documentation](https://github.com/Tagliassi/VolvoFinalProject/blob/fb76d6d5a2f9942bdcea377b68fa73e7b355981e/Api/Documentation/Documenta%C3%A7%C3%A3o%20ProjetoVolvo.pdf)
+• This document provides detailed information about the Volvo project.
 
-# Requisitos Obrigatórios
+# Mandatory Requirements
 
-• Banco de Dados: O projeto deve utilizar SQL Server como
-sistema de gerenciamento de banco de dados.
-• Entity Core do .NET: O acesso ao banco de dados deve ser
-feito utilizando o Entity Core do .NET.
-• Linguagem de Programação: O projeto deve ser
-desenvolvido em COBOL e/ou .NET.
+• Database: The project must use SQL Server as
+database management system.
+• .NET Entity Core: Access to the database must be
+made using .NET Entity Core.
+• Programming Language: The project must be
+developed in COBOL and/or .NET.
 
 # Authors:
 ##### Rafael Galafassi

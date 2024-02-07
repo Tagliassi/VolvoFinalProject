@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VolvoFinalProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b35dd5664d81480e6fb97bc945c69a5629d7db54")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9adeeb2e37edd17b6dede9e0f4d851cc4a2ba7f")]
 [assembly: System.Reflection.AssemblyProductAttribute("VolvoFinalProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VolvoFinalProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -91,7 +91,5 @@ namespace VolvoFinalProject.Api.Repository.Repositories
             // Throw an exception if the Bill entity with the specified ID is not found
             throw new ErrorViewModel("Bill Not Found", $"Bill with Id {id} not found.");
         }
-        
-
     }
 }
